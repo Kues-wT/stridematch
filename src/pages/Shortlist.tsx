@@ -5,7 +5,7 @@ import { shoes } from '../data/shoes'
 import { useProfile } from '../context/ProfileContext'
 import { recommendShoes } from '../lib/recommend'
 import { ShoeCard } from '../components/ShoeCard'
-import { ShoeSilhouette } from '../components/ShoeSilhouette'
+import { ShoeImage } from '../components/ShoeImage'
 import { useToast } from '../components/Toast'
 
 export function Shortlist() {
@@ -74,7 +74,12 @@ export function Shortlist() {
                 className="catalog-visual"
                 style={{ background: `linear-gradient(145deg, ${shoe.color}, #0b1220)` }}
               >
-                <ShoeSilhouette accent={shoe.accent} />
+                <ShoeImage
+                  src={shoe.image}
+                  alt={`${shoe.brand} ${shoe.name}`}
+                  accent={shoe.accent}
+                  imgClassName="catalog-img"
+                />
               </div>
               <div className="catalog-body">
                 <p className="shoe-brand">{shoe.brand}</p>

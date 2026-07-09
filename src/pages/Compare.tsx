@@ -4,7 +4,7 @@ import { useProfile } from '../context/ProfileContext'
 import { shoes } from '../data/shoes'
 import { recommendShoes } from '../lib/recommend'
 import { getFitBreakdown } from '../lib/fitBreakdown'
-import { ShoeSilhouette } from '../components/ShoeSilhouette'
+import { ShoeImage } from '../components/ShoeImage'
 import { useMemo } from 'react'
 
 const ROWS: { key: string; label: string; get: (id: string, ctx: RowCtx) => string | number }[] = [
@@ -101,7 +101,12 @@ export function Compare() {
                     className="compare-head-visual"
                     style={{ background: `linear-gradient(145deg, ${shoe.color}, #0b1220)` }}
                   >
-                    <ShoeSilhouette accent={shoe.accent} className="compare-head-svg" />
+                    <ShoeImage
+                      src={shoe.image}
+                      alt={`${shoe.brand} ${shoe.name}`}
+                      accent={shoe.accent}
+                      imgClassName="compare-head-img"
+                    />
                   </div>
                   <div className="compare-head-meta">
                     <span className="shoe-brand">{shoe.brand}</span>

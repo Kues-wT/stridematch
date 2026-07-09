@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, BadgeCheck, GitCompareArrows, Heart } from 'lucide-react'
 import type { ShoeMatch } from '../lib/recommend'
-import { ShoeSilhouette } from './ShoeSilhouette'
+import { ShoeImage } from './ShoeImage'
 import { useProfile } from '../context/ProfileContext'
 import { useToast } from './Toast'
 import { FitBars } from './FitBars'
@@ -26,7 +26,12 @@ export function ShoeCard({ match, rank, showFitBars }: ShoeCardProps) {
     <article className="shoe-card">
       <div className="shoe-visual" style={{ background: `linear-gradient(145deg, ${shoe.color}, #0b1220)` }}>
         {rank != null && <div className="shoe-rank">#{rank}</div>}
-        <ShoeSilhouette accent={shoe.accent} />
+        <ShoeImage
+          src={shoe.image}
+          alt={`${shoe.brand} ${shoe.name}`}
+          accent={shoe.accent}
+          imgClassName="shoe-card-img"
+        />
         <div className="shoe-score">
           <BadgeCheck size={16} />
           {score}% match

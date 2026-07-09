@@ -7,6 +7,7 @@ import { useMemo } from 'react'
 import { FitBars } from '../components/FitBars'
 import { getFitBreakdown } from '../lib/fitBreakdown'
 import { useToast } from '../components/Toast'
+import { ShoeImage } from '../components/ShoeImage'
 
 export function ShoeDetail() {
   const { id } = useParams()
@@ -58,12 +59,12 @@ export function ShoeDetail() {
           className="detail-hero"
           style={{ background: `linear-gradient(160deg, ${shoe.color}, #020617)` }}
         >
-          <svg className="detail-svg" viewBox="0 0 280 140" aria-hidden>
-            <path
-              d="M30 90c12-28 42-52 84-56 32-4 58 4 84 16 18 8 40 14 56 10 12-2 20 8 16 18-6 18-24 26-44 28H58c-20 0-36-6-28-16z"
-              fill={shoe.accent}
-            />
-          </svg>
+          <ShoeImage
+            src={shoe.image}
+            alt={`${shoe.brand} ${shoe.name}`}
+            accent={shoe.accent}
+            imgClassName="detail-img"
+          />
           {match && <span className="match-badge large">{match.score}% match for you</span>}
         </div>
 

@@ -4,7 +4,7 @@ import { Search, GitCompareArrows, Heart } from 'lucide-react'
 import { shoes, type Cushion, type PriceBand, type Stability, type Surface } from '../data/shoes'
 import { useProfile } from '../context/ProfileContext'
 import { recommendShoes } from '../lib/recommend'
-import { ShoeSilhouette } from '../components/ShoeSilhouette'
+import { ShoeImage } from '../components/ShoeImage'
 import { useToast } from '../components/Toast'
 
 export function Catalog() {
@@ -151,7 +151,12 @@ export function Catalog() {
                 className="catalog-visual"
                 style={{ background: `linear-gradient(145deg, ${shoe.color}, #0b1220)` }}
               >
-                <ShoeSilhouette accent={shoe.accent} />
+                <ShoeImage
+                  src={shoe.image}
+                  alt={`${shoe.brand} ${shoe.name}`}
+                  accent={shoe.accent}
+                  imgClassName="catalog-img"
+                />
                 {score != null && <span className="shoe-score">{score}% match</span>}
               </div>
               <div className="catalog-body">

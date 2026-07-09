@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { GitCompareArrows, X } from 'lucide-react'
 import { useProfile } from '../context/ProfileContext'
 import { shoes } from '../data/shoes'
-import { ShoeSilhouette } from './ShoeSilhouette'
+import { ShoeImage } from './ShoeImage'
 
 export function CompareBar() {
   const { compareIds, toggleCompare, clearCompare } = useProfile()
@@ -22,11 +22,13 @@ export function CompareBar() {
         <div className="compare-chips">
           {items.map((shoe) => (
             <div key={shoe.id} className="compare-chip">
-              <span
-                className="compare-chip-swatch"
-                style={{ background: `linear-gradient(135deg, ${shoe.color}, ${shoe.accent})` }}
-              >
-                <ShoeSilhouette accent={shoe.accent} className="chip-svg" />
+              <span className="compare-chip-swatch">
+                <ShoeImage
+                  src={shoe.image}
+                  alt=""
+                  accent={shoe.accent}
+                  imgClassName="chip-img"
+                />
               </span>
               <span className="compare-chip-name">{shoe.name}</span>
               <button
