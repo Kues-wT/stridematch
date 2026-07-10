@@ -1,98 +1,80 @@
 import { Link } from 'react-router-dom'
 import { Camera, BrainCircuit, ListChecks, Shield, Footprints, SportShoe } from 'lucide-react'
+import { useI18n } from '../context/I18nContext'
 
 export function HowItWorks() {
+  const { t } = useI18n()
+
   return (
     <div className="page narrow">
       <header className="page-header">
-        <p className="eyebrow">Transparent by design</p>
-        <h1>How StrideMatch works</h1>
-        <p className="lede">
-          We combine multi-photo foot analysis with a short running profile quiz, then score real
-          shoe models on fit, support, cushion, surface, and budget.
-        </p>
+        <p className="eyebrow">{t('howEyebrow')}</p>
+        <h1>{t('howTitle')}</h1>
+        <p className="lede">{t('howLede')}</p>
       </header>
 
       <div className="info-stack">
         <section className="info-card">
           <Camera size={22} className="info-icon" />
           <div>
-            <h2>Top-down photo</h2>
-            <p>
-              Wet-test style sampling of heel / midfoot / forefoot brightness and midfoot contact
-              span estimates arch category and width. You can always override.
-            </p>
+            <h2>{t('howTopTitle')}</h2>
+            <p>{t('howTopBody')}</p>
           </div>
         </section>
 
         <section className="info-card">
           <Footprints size={22} className="info-icon" />
           <div>
-            <h2>Side-view photo (optional)</h2>
-            <p>
-              Estimates midfoot clearance relative to foot height for a second arch signal. Combined
-              with top-down when both are present for higher confidence.
-            </p>
+            <h2>{t('howSideTitle')}</h2>
+            <p>{t('howSideBody')}</p>
           </div>
         </section>
 
         <section className="info-card">
           <SportShoe size={22} className="info-icon" />
           <div>
-            <h2>Old-shoe wear photo (optional)</h2>
-            <p>
-              Compares medial vs lateral outsole brightness/smoothness as a rough pronation cue
-              (inner wear → overpronation tendency; outer wear → underpronation).
-            </p>
+            <h2>{t('howWearTitle')}</h2>
+            <p>{t('howWearBody')}</p>
           </div>
         </section>
 
         <section className="info-card">
           <ListChecks size={22} className="info-icon" />
           <div>
-            <h2>Gait & goals quiz</h2>
-            <p>
-              Pronation, weekly distance, surface, experience, cushion feel, and MYR budget refine
-              the match beyond foot shape alone.
-            </p>
+            <h2>{t('howQuizTitle')}</h2>
+            <p>{t('howQuizBody')}</p>
           </div>
         </section>
 
         <section className="info-card">
           <BrainCircuit size={22} className="info-icon" />
           <div>
-            <h2>Recommendation scoring</h2>
-            <p>Each real-world shoe model is scored with weighted factors:</p>
+            <h2>{t('howScoreTitle')}</h2>
+            <p>{t('howScoreIntro')}</p>
             <ul className="plain-list">
-              <li>25% arch support fit</li>
-              <li>25% stability vs pronation</li>
-              <li>20% cushion + mileage</li>
-              <li>15% surface</li>
-              <li>10% budget</li>
-              <li>5% experience / use case</li>
+              <li>{t('howScore1')}</li>
+              <li>{t('howScore2')}</li>
+              <li>{t('howScore3')}</li>
+              <li>{t('howScore4')}</li>
+              <li>{t('howScore5')}</li>
+              <li>{t('howScore6')}</li>
             </ul>
-            <p>
-              Catalog includes ASICS, Brooks, HOKA, Saucony, Nike, New Balance, adidas, Altra, On —
-              with estimated MYR prices and research links.
-            </p>
+            <p>{t('howScoreOutro')}</p>
           </div>
         </section>
 
         <section className="info-card">
           <Shield size={22} className="info-icon" />
           <div>
-            <h2>Privacy & safety</h2>
-            <p>
-              Photo processing stays on your device. Use StrideMatch to shortlist models, then try
-              them on in a store when you can — especially for trail routes around KK.
-            </p>
+            <h2>{t('howPrivacyTitle')}</h2>
+            <p>{t('howPrivacyBody')}</p>
           </div>
         </section>
       </div>
 
       <div className="page-actions">
         <Link to="/analyze" className="btn btn-primary btn-lg">
-          Start analysis
+          {t('startAnalysis')}
         </Link>
       </div>
     </div>

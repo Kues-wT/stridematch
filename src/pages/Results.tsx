@@ -6,11 +6,14 @@ import { recommendShoes } from '../lib/recommend'
 import { ShoeCard } from '../components/ShoeCard'
 import { buildShareUrl, decodeShare, profileToShare } from '../lib/share'
 import { useToast } from '../components/Toast'
+import { useI18n } from '../context/I18nContext'
+import type { TranslationKey } from '../i18n/translations'
 
 export function Results() {
   const navigate = useNavigate()
   const { asUserProfile, profile, reset, applySharePayload, hydrated } = useProfile()
   const { toast } = useToast()
+  const { t } = useI18n()
   const [fromShare, setFromShare] = useState(false)
 
   useEffect(() => {
@@ -23,10 +26,10 @@ export function Results() {
     if (payload) {
       applySharePayload(payload)
       setFromShare(true)
-      toast('Loaded shared runner profile')
+      toast(t('toastSharedLoaded'))
       history.replaceState(null, '', window.location.pathname + window.location.search)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once after hydrate
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated])
 
   const user = asUserProfile()
@@ -36,7 +39,7 @@ export function Results() {
     return (
       <div className="page narrow">
         <div className="panel center-panel">
-          <p className="muted">Loading your profile…</p>
+          <p className="muted">{t('loadingProfile')}</p>
         </div>
       </div>
     )
@@ -46,21 +49,40 @@ export function Results() {
     return (
       <div className="page narrow">
         <div className="panel center-panel">
-          <h1>No profile yet</h1>
-          <p className="muted">Complete the foot analysis and quiz to see recommendations.</p>
+          <h1>{t('noProfileTitle')}</h1>
+          <p className="muted">{t('noProfileBody')}</p>
           <Link to="/analyze" className="btn btn-primary">
-            Start analysis
+            {t('startAnalysis')}
           </Link>
         </div>
       </div>
     )
   }
 
+  const archKey = (`arch${profile.arch![0].toUpperCase()}${profile.arch!.slice(1)}Label` as TranslationKey)
+  const surfaceKey = (
+    profile.surface === 'road'
+      ? 'surfaceRoadLabel'
+      : profile.surface === 'trail'
+        ? 'surfaceTrailLabel'
+        : profile.surface === 'mixed'
+          ? 'surfaceMixedLabel'
+          : 'surfaceTrackLabel'
+  ) as TranslationKey
+  const cushionKey = (profile.cushion === 'firm' ? 'firm' : profile.cushion === 'max' ? 'max' : 'balanced') as TranslationKey
+  const pronationKey = (
+    profile.pronation === 'over'
+      ? 'pronationOverLabel'
+      : profile.pronation === 'under'
+        ? 'pronationUnderLabel'
+        : 'pronationNeutralLabel'
+  ) as TranslationKey
+
   const copySummary = async () => {
-    const text = `My StrideMatch top pick: ${matches[0]?.shoe.brand} ${matches[0]?.shoe.name} (${matches[0]?.score}% match) — ${profile.arch} arch, ${pronationLabel(profile.pronation!)}`
+    const text = `${matches[0]?.shoe.brand} ${matches[0]?.shoe.name} (${matches[0]?.score}%) — ${t(archKey)}, ${t(pronationKey)}`
     try {
       await navigator.clipboard.writeText(text)
-      toast('Summary copied')
+      toast(t('toastSummaryCopied'))
     } catch {
       toast(text)
     }
@@ -70,24 +92,26 @@ export function Results() {
     const url = buildShareUrl(profileToShare(user))
     try {
       await navigator.clipboard.writeText(url)
-      toast('Share link copied')
+      toast(t('toastShareCopied'))
     } catch {
-      toast('Could not copy link — try again')
+      toast(t('toastShareFail'))
     }
   }
 
   return (
     <div className="page">
       <header className="page-header results-header">
-        <p className="eyebrow">Your matches</p>
-        <h1>Shoes ranked for your stride</h1>
+        <p className="eyebrow">{t('resultsEyebrow')}</p>
+        <h1>{t('resultsTitle')}</h1>
         <p className="lede">
-          Based on a <strong>{profile.arch}</strong> arch
-          {profile.archSource === 'photo' ? ' (photo-assisted)' : ''},{' '}
-          <strong>{pronationLabel(profile.pronation!)}</strong>,{' '}
-          <strong>{profile.surface}</strong> running, and{' '}
-          <strong>{profile.cushion}</strong> cushion preference.
-          {fromShare ? ' · Opened from a shared link.' : ' · Profile saved on this device.'}
+          {t('resultsBased', {
+            arch: t(archKey),
+            photo: profile.archSource === 'photo' ? t('photoAssisted') : '',
+            pronation: t(pronationKey),
+            surface: t(surfaceKey),
+            cushion: t(cushionKey),
+            saved: fromShare ? t('fromShare') : t('profileSaved'),
+          })}
         </p>
         <div className="row-actions">
           <button
@@ -98,16 +122,16 @@ export function Results() {
               navigate('/analyze')
             }}
           >
-            <RotateCcw size={16} /> Start over
+            <RotateCcw size={16} /> {t('startOver')}
           </button>
           <button type="button" className="btn btn-ghost" onClick={() => void copySummary()}>
-            <Share2 size={16} /> Copy summary
+            <Share2 size={16} /> {t('copySummary')}
           </button>
           <button type="button" className="btn btn-ghost" onClick={() => void copyLink()}>
-            <Link2 size={16} /> Copy share link
+            <Link2 size={16} /> {t('copyShareLink')}
           </button>
           <Link to="/catalog" className="btn btn-ghost">
-            Browse all
+            {t('browseAll')}
           </Link>
         </div>
       </header>
@@ -117,14 +141,6 @@ export function Results() {
           <ShoeCard key={m.shoe.id} match={m} rank={i + 1} showFitBars />
         ))}
       </div>
-
-      
     </div>
   )
-}
-
-function pronationLabel(p: string) {
-  if (p === 'over') return 'overpronation tendency'
-  if (p === 'under') return 'underpronation tendency'
-  return 'neutral gait'
 }

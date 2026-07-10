@@ -8,6 +8,8 @@ import { FitBars } from '../components/FitBars'
 import { getFitBreakdown } from '../lib/fitBreakdown'
 import { useToast } from '../components/Toast'
 import { ShoeImage } from '../components/ShoeImage'
+import { useI18n } from '../context/I18nContext'
+import type { TranslationKey } from '../i18n/translations'
 
 export function ShoeDetail() {
   const { id } = useParams()
@@ -20,6 +22,7 @@ export function ShoeDetail() {
     toggleCompare,
   } = useProfile()
   const { toast } = useToast()
+  const { t } = useI18n()
   const user = asUserProfile()
 
   const match = useMemo(() => {
@@ -36,9 +39,9 @@ export function ShoeDetail() {
     return (
       <div className="page narrow">
         <div className="panel center-panel">
-          <h1>Shoe not found</h1>
+          <h1>{t('shoeNotFound')}</h1>
           <Link to="/results" className="btn btn-primary">
-            Back to results
+            {t('backToResults')}
           </Link>
         </div>
       </div>
@@ -48,24 +51,34 @@ export function ShoeDetail() {
   const saved = isShortlisted(shoe.id)
   const comparing = isComparing(shoe.id)
 
+  const stab =
+    shoe.stability === 'motion-control' ? t('motionControl') : t(shoe.stability as TranslationKey)
+  const band =
+    shoe.priceBand === 'budget'
+      ? t('budgetBand')
+      : shoe.priceBand === 'mid'
+        ? t('midBand')
+        : t('premiumBand')
+
   return (
     <div className="page narrow">
       <Link to={user ? '/results' : '/catalog'} className="back-link">
-        <ArrowLeft size={16} /> Back
+        <ArrowLeft size={16} /> {t('back')}
       </Link>
 
       <article className="detail">
-        <div
-          className="detail-hero"
-          style={{ background: `linear-gradient(160deg, ${shoe.color}, #020617)` }}
-        >
+        <div className="detail-hero">
           <ShoeImage
             src={shoe.image}
             alt={`${shoe.brand} ${shoe.name}`}
             accent={shoe.accent}
             imgClassName="detail-img"
           />
-          {match && <span className="match-badge large">{match.score}% match for you</span>}
+          {match && (
+            <span className="match-badge large">
+              {t('matchForYou', { score: match.score })}
+            </span>
+          )}
         </div>
 
         <div className="detail-body">
@@ -75,21 +88,11 @@ export function ShoeDetail() {
           <p className="price">RM {shoe.priceMyr}</p>
 
           <div className="row-actions" style={{ marginTop: 0, marginBottom: '1.25rem' }}>
-            <a
-              className="btn btn-primary"
-              href={shoe.buyUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Research / buy <ExternalLink size={16} />
+            <a className="btn btn-primary" href={shoe.buyUrl} target="_blank" rel="noreferrer">
+              {t('researchBuy')} <ExternalLink size={16} />
             </a>
-            <a
-              className="btn btn-secondary"
-              href={shoe.officialUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Official site
+            <a className="btn btn-secondary" href={shoe.officialUrl} target="_blank" rel="noreferrer">
+              {t('officialSite')}
             </a>
           </div>
 
@@ -99,49 +102,49 @@ export function ShoeDetail() {
               className={`btn ${saved ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => {
                 toggleShortlist(shoe.id)
-                toast(saved ? 'Removed from shortlist' : 'Saved to shortlist')
+                toast(saved ? t('toastRemoved') : t('toastSaved'))
               }}
             >
               <Heart size={16} fill={saved ? 'currentColor' : 'none'} />
-              {saved ? 'Saved' : 'Save'}
+              {saved ? t('saved') : t('save')}
             </button>
             <button
               type="button"
               className={`btn ${comparing ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => {
                 toggleCompare(shoe.id)
-                toast(comparing ? 'Removed from compare' : 'Added to compare')
+                toast(comparing ? t('toastCompareRemove') : t('toastCompareAdd'))
               }}
             >
               <GitCompareArrows size={16} />
-              {comparing ? 'In compare' : 'Compare'}
+              {comparing ? t('inCompare') : t('compare')}
             </button>
             <Link to="/stores" className="btn btn-ghost">
-              Find MY stores
+              {t('findMyStores')}
             </Link>
           </div>
 
           <div className="spec-grid">
-            <Spec label="Stability" value={shoe.stability} />
-            <Spec label="Arch support" value={shoe.archSupport} />
-            <Spec label="Cushion" value={shoe.cushion} />
-            <Spec label="Drop" value={`${shoe.dropMm} mm`} />
-            <Spec label="Weight" value={`~${shoe.weightG} g`} />
-            <Spec label="Width" value={shoe.width} />
-            <Spec label="Surfaces" value={shoe.surfaces.join(', ')} />
-            <Spec label="Price band" value={shoe.priceBand} />
+            <Spec label={t('labelStability')} value={stab} />
+            <Spec label={t('labelArchSupport')} value={shoe.archSupport} />
+            <Spec label={t('labelCushion')} value={t(shoe.cushion as TranslationKey)} />
+            <Spec label={t('labelDrop')} value={`${shoe.dropMm} mm`} />
+            <Spec label={t('labelWeight')} value={`~${shoe.weightG} g`} />
+            <Spec label={t('labelWidth')} value={shoe.width} />
+            <Spec label={t('labelSurfaces')} value={shoe.surfaces.join(', ')} />
+            <Spec label={t('labelPriceBand')} value={band} />
           </div>
 
           {dims && (
             <>
-              <h2>Fit breakdown</h2>
+              <h2>{t('fitBreakdown')}</h2>
               <div className="fit-panel">
                 <FitBars dims={dims} />
               </div>
             </>
           )}
 
-          <h2>Highlights</h2>
+          <h2>{t('highlights')}</h2>
           <ul className="check-list">
             {shoe.highlights.map((h) => (
               <li key={h}>
@@ -150,7 +153,7 @@ export function ShoeDetail() {
             ))}
           </ul>
 
-          <h2>Best for</h2>
+          <h2>{t('bestFor')}</h2>
           <div className="tag-row">
             {shoe.bestFor.map((b) => (
               <span className="tag" key={b}>
@@ -161,7 +164,7 @@ export function ShoeDetail() {
 
           {match && (
             <>
-              <h2>Why it matched you</h2>
+              <h2>{t('whyMatched')}</h2>
               <ul className="reason-list detail-reasons">
                 {match.reasons.map((r) => (
                   <li key={r.label}>
@@ -174,10 +177,10 @@ export function ShoeDetail() {
 
           <div className="row-actions">
             <Link to="/analyze" className="btn btn-secondary">
-              Retake analysis
+              {t('retakeAnalysis')}
             </Link>
             <Link to={user ? '/results' : '/catalog'} className="btn btn-primary">
-              {user ? 'All matches' : 'Browse catalog'}
+              {user ? t('allMatches') : t('browseCatalog')}
             </Link>
           </div>
         </div>

@@ -6,20 +6,8 @@ import { recommendShoes } from '../lib/recommend'
 import { getFitBreakdown } from '../lib/fitBreakdown'
 import { ShoeImage } from '../components/ShoeImage'
 import { useMemo } from 'react'
-
-const ROWS: { key: string; label: string; get: (id: string, ctx: RowCtx) => string | number }[] = [
-  { key: 'match', label: 'Match score', get: (id, ctx) => (ctx.scores[id] != null ? `${ctx.scores[id]}%` : '—') },
-  { key: 'price', label: 'Price (MYR)', get: (id, ctx) => `RM ${ctx.byId[id].priceMyr}` },
-  { key: 'brand', label: 'Brand', get: (id, ctx) => ctx.byId[id].brand },
-  { key: 'stability', label: 'Stability', get: (id, ctx) => ctx.byId[id].stability },
-  { key: 'arch', label: 'Arch support', get: (id, ctx) => ctx.byId[id].archSupport },
-  { key: 'cushion', label: 'Cushion', get: (id, ctx) => ctx.byId[id].cushion },
-  { key: 'drop', label: 'Heel drop', get: (id, ctx) => `${ctx.byId[id].dropMm} mm` },
-  { key: 'weight', label: 'Weight', get: (id, ctx) => `${ctx.byId[id].weightG} g` },
-  { key: 'width', label: 'Width', get: (id, ctx) => ctx.byId[id].width },
-  { key: 'surfaces', label: 'Surfaces', get: (id, ctx) => ctx.byId[id].surfaces.join(', ') },
-  { key: 'best', label: 'Best for', get: (id, ctx) => ctx.byId[id].bestFor.join(' · ') },
-]
+import { useI18n } from '../context/I18nContext'
+import type { TranslationKey } from '../i18n/translations'
 
 interface RowCtx {
   byId: Record<string, (typeof shoes)[number]>
@@ -28,6 +16,7 @@ interface RowCtx {
 
 export function Compare() {
   const { compareIds, asUserProfile, isShortlisted, toggleShortlist, clearCompare } = useProfile()
+  const { t } = useI18n()
   const user = asUserProfile()
 
   const selected = useMemo(
@@ -50,20 +39,32 @@ export function Compare() {
   const byId = useMemo(() => Object.fromEntries(selected.map((s) => [s.id, s])), [selected])
   const ctx: RowCtx = { byId, scores }
 
+  const rows: { key: string; labelKey: TranslationKey; get: (id: string, c: RowCtx) => string | number }[] = [
+    { key: 'match', labelKey: 'rowMatch', get: (id, c) => (c.scores[id] != null ? `${c.scores[id]}%` : '—') },
+    { key: 'price', labelKey: 'rowPrice', get: (id, c) => `RM ${c.byId[id].priceMyr}` },
+    { key: 'brand', labelKey: 'rowBrand', get: (id, c) => c.byId[id].brand },
+    { key: 'stability', labelKey: 'rowStability', get: (id, c) => c.byId[id].stability },
+    { key: 'arch', labelKey: 'rowArch', get: (id, c) => c.byId[id].archSupport },
+    { key: 'cushion', labelKey: 'rowCushion', get: (id, c) => c.byId[id].cushion },
+    { key: 'drop', labelKey: 'rowDrop', get: (id, c) => `${c.byId[id].dropMm} mm` },
+    { key: 'weight', labelKey: 'rowWeight', get: (id, c) => `${c.byId[id].weightG} g` },
+    { key: 'width', labelKey: 'rowWidth', get: (id, c) => c.byId[id].width },
+    { key: 'surfaces', labelKey: 'rowSurfaces', get: (id, c) => c.byId[id].surfaces.join(', ') },
+    { key: 'best', labelKey: 'rowBestFor', get: (id, c) => c.byId[id].bestFor.join(' · ') },
+  ]
+
   if (selected.length < 2) {
     return (
       <div className="page narrow">
         <div className="panel center-panel">
-          <h1>Compare shoes</h1>
-          <p className="muted">
-            Add at least two shoes from Results, Catalog, or Shortlist using the compare button.
-          </p>
+          <h1>{t('compareTitle')}</h1>
+          <p className="muted">{t('compareEmptyBody')}</p>
           <div className="row-actions" style={{ justifyContent: 'center' }}>
             <Link to="/results" className="btn btn-primary">
-              Go to results
+              {t('compareGoResults')}
             </Link>
             <Link to="/catalog" className="btn btn-secondary">
-              Browse catalog
+              {t('browseCatalog')}
             </Link>
           </div>
         </div>
@@ -71,21 +72,28 @@ export function Compare() {
     )
   }
 
+  const fitKeys: { id: string; labelKey: TranslationKey }[] = [
+    { id: 'arch', labelKey: 'fitArch' },
+    { id: 'gait', labelKey: 'fitGait' },
+    { id: 'cushion', labelKey: 'fitCushion' },
+    { id: 'surface', labelKey: 'fitSurface' },
+    { id: 'budget', labelKey: 'fitBudget' },
+  ]
+
   return (
     <div className="page">
       <header className="page-header">
         <Link to="/results" className="back-link">
-          <ArrowLeft size={16} /> Back
+          <ArrowLeft size={16} /> {t('back')}
         </Link>
-        <p className="eyebrow">Side-by-side</p>
-        <h1>Compare shoes</h1>
+        <p className="eyebrow">{t('compareEyebrow')}</p>
+        <h1>{t('compareTitle')}</h1>
         <p className="lede">
-          Specs and fit dimensions for your shortlisted picks
-          {user ? ' — scored against your saved profile.' : '.'}
+          {t('compareLede', { scored: user ? t('compareScored') : '.' })}
         </p>
         <div className="row-actions">
           <button type="button" className="btn btn-secondary" onClick={clearCompare}>
-            Clear compare
+            {t('clearCompare')}
           </button>
         </div>
       </header>
@@ -94,13 +102,10 @@ export function Compare() {
         <table className="compare-table">
           <thead>
             <tr>
-              <th scope="col">Spec</th>
+              <th scope="col">{t('spec')}</th>
               {selected.map((shoe) => (
                 <th key={shoe.id} scope="col">
-                  <div
-                    className="compare-head-visual"
-                    style={{ background: `linear-gradient(145deg, ${shoe.color}, #0b1220)` }}
-                  >
+                  <div className="compare-head-visual">
                     <ShoeImage
                       src={shoe.image}
                       alt={`${shoe.brand} ${shoe.name}`}
@@ -112,17 +117,17 @@ export function Compare() {
                     <span className="shoe-brand">{shoe.brand}</span>
                     <strong>{shoe.name}</strong>
                     {scores[shoe.id] != null && (
-                      <span className="match-badge">{scores[shoe.id]}% match</span>
+                      <span className="match-badge">{t('matchPct', { score: scores[shoe.id] })}</span>
                     )}
                     <div className="compare-head-actions">
                       <Link to={`/results/${shoe.id}`} className="btn btn-ghost btn-sm">
-                        Details
+                        {t('details')}
                       </Link>
                       <button
                         type="button"
                         className={`icon-btn ${isShortlisted(shoe.id) ? 'active' : ''}`}
                         onClick={() => toggleShortlist(shoe.id)}
-                        aria-label="Toggle shortlist"
+                        aria-label={t('save')}
                       >
                         <Heart size={14} fill={isShortlisted(shoe.id) ? 'currentColor' : 'none'} />
                       </button>
@@ -133,46 +138,34 @@ export function Compare() {
             </tr>
           </thead>
           <tbody>
-            {ROWS.map((row) => (
+            {rows.map((row) => (
               <tr key={row.key}>
-                <th scope="row">{row.label}</th>
+                <th scope="row">{t(row.labelKey)}</th>
                 {selected.map((shoe) => (
                   <td key={shoe.id}>{row.get(shoe.id, ctx)}</td>
                 ))}
               </tr>
             ))}
             {user &&
-              ['arch', 'gait', 'cushion', 'surface', 'budget'].map((dimId) => {
-                const label =
-                  dimId === 'arch'
-                    ? 'Fit: arch'
-                    : dimId === 'gait'
-                      ? 'Fit: gait'
-                      : dimId === 'cushion'
-                        ? 'Fit: cushion'
-                        : dimId === 'surface'
-                          ? 'Fit: surface'
-                          : 'Fit: budget'
-                return (
-                  <tr key={dimId}>
-                    <th scope="row">{label}</th>
-                    {selected.map((shoe) => {
-                      const dim = getFitBreakdown(shoe, user).find((d) => d.id === dimId)
-                      const score = dim?.score ?? 0
-                      return (
-                        <td key={shoe.id}>
-                          <div className="mini-fit">
-                            <span>{score}%</span>
-                            <div className="fit-bar-track">
-                              <i style={{ width: `${score}%` }} />
-                            </div>
+              fitKeys.map((fk) => (
+                <tr key={fk.id}>
+                  <th scope="row">{t(fk.labelKey)}</th>
+                  {selected.map((shoe) => {
+                    const dim = getFitBreakdown(shoe, user).find((d) => d.id === fk.id)
+                    const score = dim?.score ?? 0
+                    return (
+                      <td key={shoe.id}>
+                        <div className="mini-fit">
+                          <span>{score}%</span>
+                          <div className="fit-bar-track">
+                            <i style={{ width: `${score}%` }} />
                           </div>
-                        </td>
-                      )
-                    })}
-                  </tr>
-                )
-              })}
+                        </div>
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

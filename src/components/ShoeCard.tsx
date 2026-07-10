@@ -6,6 +6,8 @@ import { useProfile } from '../context/ProfileContext'
 import { useToast } from './Toast'
 import { FitBars } from './FitBars'
 import { getFitBreakdown } from '../lib/fitBreakdown'
+import { useI18n } from '../context/I18nContext'
+import type { TranslationKey } from '../i18n/translations'
 
 interface ShoeCardProps {
   match: ShoeMatch
@@ -17,14 +19,19 @@ export function ShoeCard({ match, rank, showFitBars }: ShoeCardProps) {
   const { shoe, score, reasons } = match
   const { isShortlisted, toggleShortlist, isComparing, toggleCompare, asUserProfile } = useProfile()
   const { toast } = useToast()
+  const { t } = useI18n()
   const user = asUserProfile()
   const saved = isShortlisted(shoe.id)
   const comparing = isComparing(shoe.id)
   const dims = user && showFitBars ? getFitBreakdown(shoe, user) : null
 
+  const stab =
+    shoe.stability === 'motion-control' ? t('motionControl') : t(shoe.stability as TranslationKey)
+  const cush = t(shoe.cushion as TranslationKey)
+
   return (
     <article className="shoe-card">
-      <div className="shoe-visual" style={{ background: `linear-gradient(145deg, ${shoe.color}, #0b1220)` }}>
+      <div className="shoe-visual">
         {rank != null && <div className="shoe-rank">#{rank}</div>}
         <ShoeImage
           src={shoe.image}
@@ -34,7 +41,7 @@ export function ShoeCard({ match, rank, showFitBars }: ShoeCardProps) {
         />
         <div className="shoe-score">
           <BadgeCheck size={16} />
-          {score}% match
+          {t('matchPct', { score })}
         </div>
       </div>
       <div className="shoe-body">
@@ -42,8 +49,8 @@ export function ShoeCard({ match, rank, showFitBars }: ShoeCardProps) {
         <h3>{shoe.name}</h3>
         <p className="shoe-summary">{shoe.summary}</p>
         <div className="tag-row">
-          <span className="tag">{shoe.stability}</span>
-          <span className="tag">{shoe.cushion} cushion</span>
+          <span className="tag">{stab}</span>
+          <span className="tag">{t('cushionTag', { value: cush })}</span>
           <span className="tag">RM {shoe.priceMyr}</span>
         </div>
 
@@ -59,17 +66,17 @@ export function ShoeCard({ match, rank, showFitBars }: ShoeCardProps) {
 
         <div className="card-actions">
           <Link to={`/results/${shoe.id}`} className="btn btn-ghost">
-            View details <ArrowRight size={16} />
+            {t('viewDetails')} <ArrowRight size={16} />
           </Link>
           <div className="card-icon-actions">
             <button
               type="button"
               className={`icon-btn ${saved ? 'active' : ''}`}
-              aria-label={saved ? 'Remove from shortlist' : 'Save to shortlist'}
-              title={saved ? 'Saved' : 'Save'}
+              aria-label={saved ? t('saved') : t('save')}
+              title={saved ? t('saved') : t('save')}
               onClick={() => {
                 toggleShortlist(shoe.id)
-                toast(saved ? 'Removed from shortlist' : 'Saved to shortlist')
+                toast(saved ? t('toastRemoved') : t('toastSaved'))
               }}
             >
               <Heart size={16} fill={saved ? 'currentColor' : 'none'} />
@@ -77,11 +84,11 @@ export function ShoeCard({ match, rank, showFitBars }: ShoeCardProps) {
             <button
               type="button"
               className={`icon-btn ${comparing ? 'active' : ''}`}
-              aria-label={comparing ? 'Remove from compare' : 'Add to compare'}
-              title={comparing ? 'In compare' : 'Compare'}
+              aria-label={comparing ? t('inCompare') : t('compare')}
+              title={comparing ? t('inCompare') : t('compare')}
               onClick={() => {
                 toggleCompare(shoe.id)
-                toast(comparing ? 'Removed from compare' : 'Added to compare (max 3)')
+                toast(comparing ? t('toastCompareRemove') : t('toastCompareMax'))
               }}
             >
               <GitCompareArrows size={16} />

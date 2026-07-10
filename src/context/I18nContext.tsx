@@ -12,13 +12,23 @@ import { loadJson, saveJson } from '../lib/storage'
 
 const LANG_KEY = 'stridematch.lang.v1'
 
+type Vars = Record<string, string | number | undefined>
+
 interface I18nValue {
   lang: Lang
   setLang: (lang: Lang) => void
-  t: (key: TranslationKey) => string
+  t: (key: TranslationKey, vars?: Vars) => string
 }
 
 const I18nContext = createContext<I18nValue | null>(null)
+
+function format(template: string, vars?: Vars) {
+  if (!vars) return template
+  return template.replace(/\{\{(\w+)\}\}/g, (_, key: string) => {
+    const value = vars[key]
+    return value == null ? '' : String(value)
+  })
+}
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>('en')
@@ -41,7 +51,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [lang, ready])
 
   const t = useCallback(
-    (key: TranslationKey) => translations[lang][key] ?? translations.en[key] ?? key,
+    (key: TranslationKey, vars?: Vars) => {
+      const raw = translations[lang][key] ?? translations.en[key] ?? key
+      return format(raw, vars)
+    },
     [lang],
   )
 

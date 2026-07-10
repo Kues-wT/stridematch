@@ -22,11 +22,12 @@ import {
 import { useProfile } from '../context/ProfileContext'
 import { StepIndicator } from '../components/StepIndicator'
 import { OptionCard } from '../components/OptionCard'
-
-const STEPS = ['Photos', 'Confirm', 'Goals', 'Results']
+import { useI18n } from '../context/I18nContext'
+import type { TranslationKey } from '../i18n/translations'
 
 export function Analyze() {
   const navigate = useNavigate()
+  const { t } = useI18n()
   const topRef = useRef<HTMLInputElement>(null)
   const sideRef = useRef<HTMLInputElement>(null)
   const wearRef = useRef<HTMLInputElement>(null)
@@ -49,10 +50,17 @@ export function Analyze() {
   const [sidePreview, setSidePreview] = useState<string | null>(null)
   const [wearPreview, setWearPreview] = useState<string | null>(null)
 
+  const STEPS = [t('stepPhotos'), t('stepConfirm'), t('stepGoals'), t('stepResults')]
+
+  const archWord = (a: ArchType) =>
+    t(
+      (a === 'low' ? 'archLowLabel' : a === 'high' ? 'archHighLabel' : 'archNormalLabel') as TranslationKey,
+    )
+
   const runTop = async (file: File | null | undefined) => {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      setError('Please choose an image file (JPG, PNG, or WebP).')
+      setError(t('errImageType'))
       return
     }
     setError(null)
@@ -65,7 +73,7 @@ export function Analyze() {
       const combined = combineFootAnalyses(result, sideResult)
       applyFootResult(combined ?? result)
     } catch {
-      setError('Could not analyse that top-down photo. Try better lighting.')
+      setError(t('errTopPhoto'))
     } finally {
       setBusy(null)
     }
@@ -74,7 +82,7 @@ export function Analyze() {
   const runSide = async (file: File | null | undefined) => {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      setError('Please choose an image file (JPG, PNG, or WebP).')
+      setError(t('errImageType'))
       return
     }
     setError(null)
@@ -87,7 +95,7 @@ export function Analyze() {
       const combined = combineFootAnalyses(topResult, result)
       applyFootResult(combined ?? result)
     } catch {
-      setError('Could not analyse that side photo. Keep the full foot in frame.')
+      setError(t('errSidePhoto'))
     } finally {
       setBusy(null)
     }
@@ -96,7 +104,7 @@ export function Analyze() {
   const runWear = async (file: File | null | undefined) => {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      setError('Please choose an image file (JPG, PNG, or WebP).')
+      setError(t('errImageType'))
       return
     }
     setError(null)
@@ -112,7 +120,7 @@ export function Analyze() {
         pronation: profile.pronation ?? result.pronationHint,
       })
     } catch {
-      setError('Could not analyse the wear photo. You can set pronation manually.')
+      setError(t('errWearPhoto'))
     } finally {
       setBusy(null)
     }
@@ -123,14 +131,14 @@ export function Analyze() {
     setProfile({
       arch: result.arch,
       archSource: 'photo',
-      widthHint: result.widthHint === 'standard' && profile.widthHint ? profile.widthHint : result.widthHint,
+      widthHint:
+        result.widthHint === 'standard' && profile.widthHint ? profile.widthHint : result.widthHint,
       photoAnalysis: result,
     })
   }
 
   const continueFromPhotos = () => {
     if (!analysis && !profile.arch) {
-      // allow manual path
       setProfile({
         arch: profile.arch ?? 'normal',
         archSource: 'manual',
@@ -157,7 +165,7 @@ export function Analyze() {
 
   const goQuiz = () => {
     if (!profile.arch) {
-      setError('Pick an arch type to continue.')
+      setError(t('errPickArch'))
       return
     }
     setError(null)
@@ -177,7 +185,7 @@ export function Analyze() {
     ] as const
     for (const key of required) {
       if (!profile[key]) {
-        setError('Please answer every question to get recommendations.')
+        setError(t('errAnswerAll'))
         return
       }
     }
@@ -188,58 +196,66 @@ export function Analyze() {
     navigate('/results')
   }
 
+  const topLabel = topResult
+    ? `${archWord(topResult.arch)} · ${topResult.widthHint}`
+    : null
+  const sideLabel = sideResult
+    ? `${archWord(sideResult.arch)} · ${Math.round((sideResult.sideArchRatio ?? 0) * 100)}%`
+    : null
+  const wearLabel = wearResult
+    ? `${wearResult.pronationHint} · ${Math.round(wearResult.confidence * 100)}%`
+    : null
+
   return (
     <div className="page narrow">
       <header className="page-header">
-        <p className="eyebrow">Foot analysis</p>
-        <h1>Let&apos;s match your shoes</h1>
+        <p className="eyebrow">{t('analyzeEyebrow')}</p>
+        <h1>{t('analyzeTitle')}</h1>
         <StepIndicator steps={STEPS} current={step} />
       </header>
 
       {step === 0 && (
         <section className="panel">
-          <h2>Photo analysis (optional extras unlock better confidence)</h2>
-          <p className="muted">
-            All processing stays on this device. Add one photo or stack top-down + side + old-shoe
-            wear for a stronger estimate.
-          </p>
+          <h2>{t('photoSectionTitle')}</h2>
+          <p className="muted">{t('photoSectionBody')}</p>
 
           <div className="photo-slots">
             <PhotoSlot
-              title="1. Top-down foot"
+              title={t('photoTopTitle')}
               icon={<Footprints size={20} />}
-              hint="Bare foot on contrasting floor, camera straight above."
+              hint={t('photoTopHint')}
               busy={busy === 'top'}
               preview={topResult?.previewDataUrl || photoPreview}
-              resultLabel={topResult ? `${topResult.arch} arch · ${topResult.widthHint} width` : null}
+              resultLabel={topLabel}
+              analysingLabel={t('analysing')}
+              addLabel={t('addPhoto')}
+              replaceLabel={t('tapReplace')}
               inputRef={topRef}
               onFile={(f) => void runTop(f)}
             />
             <PhotoSlot
-              title="2. Side view (optional)"
+              title={t('photoSideTitle')}
               icon={<PersonStanding size={20} />}
-              hint="Inside of the foot, phone level with ankle, full sole on floor."
+              hint={t('photoSideHint')}
               busy={busy === 'side'}
               preview={sideResult?.previewDataUrl || sidePreview}
-              resultLabel={
-                sideResult
-                  ? `${sideResult.arch} arch · clearance ${Math.round((sideResult.sideArchRatio ?? 0) * 100)}%`
-                  : null
-              }
+              resultLabel={sideLabel}
+              analysingLabel={t('analysing')}
+              addLabel={t('addPhoto')}
+              replaceLabel={t('tapReplace')}
               inputRef={sideRef}
               onFile={(f) => void runSide(f)}
             />
             <PhotoSlot
-              title="3. Old shoe outsole wear (optional)"
+              title={t('photoWearTitle')}
               icon={<SportShoe size={20} />}
-              hint="Photo of the worn outsole, heel at the bottom of the frame."
+              hint={t('photoWearHint')}
               busy={busy === 'wear'}
               preview={wearResult?.previewDataUrl || wearPreview}
-              resultLabel={
-                wearResult
-                  ? `${wearResult.pronationHint} wear cue · ${Math.round(wearResult.confidence * 100)}% conf.`
-                  : null
-              }
+              resultLabel={wearLabel}
+              analysingLabel={t('analysing')}
+              addLabel={t('addPhoto')}
+              replaceLabel={t('tapReplace')}
               inputRef={wearRef}
               onFile={(f) => void runWear(f)}
             />
@@ -248,18 +264,18 @@ export function Analyze() {
           <div className="tip-box">
             <Lightbulb size={18} />
             <div>
-              <strong>Photo tips</strong>
+              <strong>{t('photoTips')}</strong>
               <ul>
-                <li>Even lighting, no heavy shadows under the arch</li>
-                <li>One foot fully in frame; remove socks for arch photos</li>
-                <li>Wear photo: clean-ish outsole, both medial & lateral edges visible</li>
+                <li>{t('photoTip1')}</li>
+                <li>{t('photoTip2')}</li>
+                <li>{t('photoTip3')}</li>
               </ul>
             </div>
           </div>
 
           <div className="row-actions">
             <button type="button" className="btn btn-secondary" onClick={skipPhotos}>
-              Skip photos — set manually
+              {t('skipPhotos')}
             </button>
             <button
               type="button"
@@ -267,7 +283,7 @@ export function Analyze() {
               onClick={continueFromPhotos}
               disabled={!!busy}
             >
-              Continue <ArrowRight size={16} />
+              {t('continue')} <ArrowRight size={16} />
             </button>
           </div>
           {error && <p className="error">{error}</p>}
@@ -276,11 +292,15 @@ export function Analyze() {
 
       {step === 1 && (
         <section className="panel">
-          <h2>Confirm arch, width & gait cues</h2>
+          <h2>{t('confirmTitle')}</h2>
           <p className="muted">
             {analysis
-              ? `Estimate: ${analysis.arch} arch (~${Math.round(analysis.archConfidence * 100)}% confidence, ${analysis.mode}). Adjust if it feels wrong.`
-              : 'No photo used — pick the descriptions that match you best.'}
+              ? t('confirmWithPhoto', {
+                  arch: archWord(analysis.arch),
+                  confidence: Math.round(analysis.archConfidence * 100),
+                  mode: analysis.mode,
+                })
+              : t('confirmNoPhoto')}
           </p>
 
           {(analysis?.previewDataUrl || photoPreview || sidePreview || wearPreview) && (
@@ -288,21 +308,21 @@ export function Analyze() {
               {(analysis?.previewDataUrl || photoPreview) && (
                 <img
                   src={analysis?.previewDataUrl || photoPreview || ''}
-                  alt="Top-down or combined preview"
+                  alt=""
                   className="preview-img"
                 />
               )}
               {(sideResult?.previewDataUrl || sidePreview) && (
                 <img
                   src={sideResult?.previewDataUrl || sidePreview || ''}
-                  alt="Side-view preview"
+                  alt=""
                   className="preview-img"
                 />
               )}
               {(wearResult?.previewDataUrl || wearPreview) && (
                 <img
                   src={wearResult?.previewDataUrl || wearPreview || ''}
-                  alt="Wear analysis preview"
+                  alt=""
                   className="preview-img"
                 />
               )}
@@ -317,25 +337,17 @@ export function Analyze() {
             </div>
           )}
 
-          <h3 className="field-label">Arch type</h3>
+          <h3 className="field-label">{t('archType')}</h3>
           <div className="option-grid">
             {(
               [
-                {
-                  id: 'low' as ArchType,
-                  title: 'Low arch / flat',
-                  description: 'Most of the midfoot touches the ground; footprints look filled in.',
-                },
+                { id: 'low' as ArchType, title: t('archLow'), description: t('archLowDesc') },
                 {
                   id: 'normal' as ArchType,
-                  title: 'Normal arch',
-                  description: 'A moderate curve; classic half-filled footprint.',
+                  title: t('archNormal'),
+                  description: t('archNormalDesc'),
                 },
-                {
-                  id: 'high' as ArchType,
-                  title: 'High arch',
-                  description: 'Clear gap under the midfoot; footprint is mostly heel + ball.',
-                },
+                { id: 'high' as ArchType, title: t('archHigh'), description: t('archHighDesc') },
               ] as const
             ).map((opt) => (
               <OptionCard
@@ -353,13 +365,13 @@ export function Analyze() {
             ))}
           </div>
 
-          <h3 className="field-label">Width</h3>
+          <h3 className="field-label">{t('widthLabel')}</h3>
           <div className="option-grid three">
             {(
               [
-                { id: 'narrow' as const, title: 'Narrow' },
-                { id: 'standard' as const, title: 'Standard width' },
-                { id: 'wide' as const, title: 'Wide' },
+                { id: 'narrow' as const, title: t('widthNarrow') },
+                { id: 'standard' as const, title: t('widthStandard') },
+                { id: 'wide' as const, title: t('widthWide') },
               ] as const
             ).map((opt) => (
               <OptionCard
@@ -373,17 +385,16 @@ export function Analyze() {
 
           {wearResult && (
             <p className="muted wear-hint">
-              Wear photo suggests <strong>{wearResult.pronationHint}</strong> tendency — you can
-              still change this in the next step.
+              {t('wearSuggests', { hint: wearResult.pronationHint })}
             </p>
           )}
 
           <div className="row-actions">
             <button type="button" className="btn btn-secondary" onClick={() => setStep(0)}>
-              <RefreshCw size={16} /> Back to photos
+              <RefreshCw size={16} /> {t('backToPhotos')}
             </button>
             <button type="button" className="btn btn-primary" onClick={goQuiz}>
-              Continue <ArrowRight size={16} />
+              {t('continue')} <ArrowRight size={16} />
             </button>
           </div>
           {error && <p className="error">{error}</p>}
@@ -392,151 +403,151 @@ export function Analyze() {
 
       {step === 2 && (
         <section className="panel">
-          <h2>Gait & running goals</h2>
-          <p className="muted">Answer based on how you usually run — there are no wrong picks.</p>
+          <h2>{t('goalsTitle')}</h2>
+          <p className="muted">{t('goalsBody')}</p>
 
-          <Field label="When you run, your foot tends to…">
+          <Field label={t('qPronation')}>
             <div className="option-grid">
               <OptionCard
                 selected={profile.pronation === 'over'}
-                title="Roll inward (overpronate)"
+                title={t('pronationOver')}
                 description={
                   wearResult?.pronationHint === 'over'
-                    ? 'Suggested by your wear photo · shoes wear on the inner edge'
-                    : 'Shoes wear on the inner edge; ankles feel like they collapse in.'
+                    ? t('pronationOverWear')
+                    : t('pronationOverDesc')
                 }
                 onClick={() => setProfile({ pronation: 'over' })}
               />
               <OptionCard
                 selected={profile.pronation === 'neutral'}
-                title="Stay fairly centered"
-                description="Even wear under the shoe; comfortable in neutral trainers."
+                title={t('pronationNeutral')}
+                description={t('pronationNeutralDesc')}
                 onClick={() => setProfile({ pronation: 'neutral' })}
               />
               <OptionCard
                 selected={profile.pronation === 'under'}
-                title="Roll outward (underpronate)"
+                title={t('pronationUnder')}
                 description={
                   wearResult?.pronationHint === 'under'
-                    ? 'Suggested by your wear photo · outer-edge wear'
-                    : 'Outer-edge wear; you may prefer cushioned neutrals.'
+                    ? t('pronationUnderWear')
+                    : t('pronationUnderDesc')
                 }
                 onClick={() => setProfile({ pronation: 'under' })}
               />
             </div>
           </Field>
 
-          <Field label="Experience level">
+          <Field label={t('qExperience')}>
             <div className="option-grid three">
               <OptionCard
                 selected={profile.experience === 'beginner'}
-                title="Beginner"
+                title={t('expBeginner')}
                 onClick={() => setProfile({ experience: 'beginner' })}
               />
               <OptionCard
                 selected={profile.experience === 'intermediate'}
-                title="Intermediate"
+                title={t('expIntermediate')}
                 onClick={() => setProfile({ experience: 'intermediate' })}
               />
               <OptionCard
                 selected={profile.experience === 'advanced'}
-                title="Advanced"
+                title={t('expAdvanced')}
                 onClick={() => setProfile({ experience: 'advanced' })}
               />
             </div>
           </Field>
 
-          <Field label="Weekly running volume">
+          <Field label={t('qDistance')}>
             <div className="option-grid three">
               <OptionCard
                 selected={profile.weeklyDistance === 'short'}
-                title="Under 15 km"
-                description="Short runs & walk-run"
+                title={t('distShort')}
+                description={t('distShortDesc')}
                 onClick={() => setProfile({ weeklyDistance: 'short' })}
               />
               <OptionCard
                 selected={profile.weeklyDistance === 'moderate'}
-                title="15–40 km"
-                description="Regular training"
+                title={t('distModerate')}
+                description={t('distModerateDesc')}
                 onClick={() => setProfile({ weeklyDistance: 'moderate' })}
               />
               <OptionCard
                 selected={profile.weeklyDistance === 'long'}
-                title="40+ km"
-                description="High mileage"
+                title={t('distLong')}
+                description={t('distLongDesc')}
                 onClick={() => setProfile({ weeklyDistance: 'long' })}
               />
             </div>
           </Field>
 
-          <Field label="Primary surface">
+          <Field label={t('qSurface')}>
             <div className="option-grid">
               <OptionCard
                 selected={profile.surface === 'road'}
-                title="Road / pavement"
+                title={t('surfaceRoad')}
                 onClick={() => setProfile({ surface: 'road' })}
               />
               <OptionCard
                 selected={profile.surface === 'trail'}
-                title="Trail"
+                title={t('surfaceTrail')}
                 onClick={() => setProfile({ surface: 'trail' })}
               />
               <OptionCard
                 selected={profile.surface === 'mixed'}
-                title="Mixed"
+                title={t('surfaceMixed')}
                 onClick={() => setProfile({ surface: 'mixed' })}
               />
               <OptionCard
                 selected={profile.surface === 'track'}
-                title="Track / speedwork"
+                title={t('surfaceTrack')}
                 onClick={() => setProfile({ surface: 'track' })}
               />
             </div>
           </Field>
 
-          <Field label="Cushion feel you prefer">
+          <Field label={t('qCushion')}>
             <div className="option-grid three">
               <OptionCard
                 selected={profile.cushion === 'firm'}
-                title="Firm / ground feel"
+                title={t('cushionFirm')}
                 onClick={() => setProfile({ cushion: 'firm' })}
               />
               <OptionCard
                 selected={profile.cushion === 'balanced'}
-                title="Balanced"
+                title={t('cushionBalanced')}
                 onClick={() => setProfile({ cushion: 'balanced' })}
               />
               <OptionCard
                 selected={profile.cushion === 'max'}
-                title="Max plush"
+                title={t('cushionMax')}
                 onClick={() => setProfile({ cushion: 'max' })}
               />
             </div>
           </Field>
 
-          <Field label="Budget (MYR)">
+          <Field label={t('qBudget')}>
             <div className="option-grid">
               <OptionCard
                 selected={profile.budget === 'budget'}
-                title="Under RM 350"
-                description="Value picks"
+                title={t('budgetLow')}
+                description={t('budgetLowDesc')}
                 onClick={() => setProfile({ budget: 'budget' })}
               />
               <OptionCard
                 selected={profile.budget === 'mid'}
-                title="RM 350–650"
-                description="Most daily trainers"
+                title={t('budgetMid')}
+                description={t('budgetMidDesc')}
                 onClick={() => setProfile({ budget: 'mid' })}
               />
               <OptionCard
                 selected={profile.budget === 'premium'}
-                title="RM 650+"
-                description="Premium foams & race shoes"
+                title={t('budgetPremium')}
+                description={t('budgetPremiumDesc')}
                 onClick={() => setProfile({ budget: 'premium' })}
               />
               <OptionCard
                 selected={profile.budget === 'any'}
-                title="Any budget"
+                title={t('budgetAny')}
                 onClick={() => setProfile({ budget: 'any' })}
               />
             </div>
@@ -544,10 +555,10 @@ export function Analyze() {
 
           <div className="row-actions">
             <button type="button" className="btn btn-secondary" onClick={() => setStep(1)}>
-              Back
+              {t('back')}
             </button>
             <button type="button" className="btn btn-primary" onClick={finishQuiz}>
-              <Camera size={16} /> See my matches
+              <Camera size={16} /> {t('seeMatches')}
             </button>
           </div>
           {error && <p className="error">{error}</p>}
@@ -573,6 +584,9 @@ function PhotoSlot({
   busy,
   preview,
   resultLabel,
+  analysingLabel,
+  addLabel,
+  replaceLabel,
   inputRef,
   onFile,
 }: {
@@ -582,6 +596,9 @@ function PhotoSlot({
   busy: boolean
   preview: string | null
   resultLabel: string | null
+  analysingLabel: string
+  addLabel: string
+  replaceLabel: string
   inputRef: React.RefObject<HTMLInputElement | null>
   onFile: (file: File | null | undefined) => void
 }) {
@@ -610,18 +627,18 @@ function PhotoSlot({
         {busy ? (
           <>
             <Loader2 className="spin" size={28} />
-            <p>Analysing…</p>
+            <p>{analysingLabel}</p>
           </>
         ) : preview ? (
           <>
             <img src={preview} alt="" className="slot-thumb" />
-            <p>{resultLabel ?? 'Tap to replace'}</p>
+            <p>{resultLabel ?? replaceLabel}</p>
           </>
         ) : (
           <>
             <ImagePlus size={28} />
             <p>
-              <strong>Add photo</strong>
+              <strong>{addLabel}</strong>
             </p>
           </>
         )}

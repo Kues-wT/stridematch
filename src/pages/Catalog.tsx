@@ -6,10 +6,13 @@ import { useProfile } from '../context/ProfileContext'
 import { recommendShoes } from '../lib/recommend'
 import { ShoeImage } from '../components/ShoeImage'
 import { useToast } from '../components/Toast'
+import { useI18n } from '../context/I18nContext'
+import type { TranslationKey } from '../i18n/translations'
 
 export function Catalog() {
   const { asUserProfile, isShortlisted, toggleShortlist, isComparing, toggleCompare } = useProfile()
   const { toast } = useToast()
+  const { t } = useI18n()
   const user = asUserProfile()
 
   const [q, setQ] = useState('')
@@ -54,14 +57,17 @@ export function Catalog() {
     return list
   }, [q, surface, stability, cushion, price, sort, scoreMap])
 
+  const labelStab = (v: string) =>
+    v === 'motion-control' ? t('motionControl') : t(v as TranslationKey)
+  const labelCush = (v: string) => t(v as TranslationKey)
+
   return (
     <div className="page">
       <header className="page-header">
-        <p className="eyebrow">Browse</p>
-        <h1>Shoe catalog</h1>
+        <p className="eyebrow">{t('catalogEyebrow')}</p>
+        <h1>{t('catalogTitle')}</h1>
         <p className="lede">
-          Popular road & trail models with clear filters for surface, support, and budget
-          {user ? ' — ranked for your profile when available.' : '.'}
+          {t('catalogLede', { ranked: user ? t('catalogRanked') : '.' })}
         </p>
       </header>
 
@@ -70,72 +76,72 @@ export function Catalog() {
           <Search size={16} />
           <input
             type="search"
-            placeholder="Search name, brand, use case…"
+            placeholder={t('searchPlaceholder')}
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
         </label>
         <div className="filter-row">
           <Select
-            label="Surface"
+            label={t('filterSurface')}
             value={surface}
             onChange={(v) => setSurface(v as Surface | 'all')}
             options={[
-              ['all', 'All surfaces'],
-              ['road', 'Road'],
-              ['trail', 'Trail'],
-              ['track', 'Track'],
-              ['gym', 'Gym'],
+              ['all', t('allSurfaces')],
+              ['road', t('road')],
+              ['trail', t('trail')],
+              ['track', t('track')],
+              ['gym', t('gym')],
             ]}
           />
           <Select
-            label="Stability"
+            label={t('filterStability')}
             value={stability}
             onChange={(v) => setStability(v as Stability | 'all')}
             options={[
-              ['all', 'All'],
-              ['neutral', 'Neutral'],
-              ['stability', 'Stability'],
-              ['motion-control', 'Motion control'],
+              ['all', t('all')],
+              ['neutral', t('neutral')],
+              ['stability', t('stability')],
+              ['motion-control', t('motionControl')],
             ]}
           />
           <Select
-            label="Cushion"
+            label={t('filterCushion')}
             value={cushion}
             onChange={(v) => setCushion(v as Cushion | 'all')}
             options={[
-              ['all', 'All'],
-              ['firm', 'Firm'],
-              ['balanced', 'Balanced'],
-              ['max', 'Max'],
+              ['all', t('all')],
+              ['firm', t('firm')],
+              ['balanced', t('balanced')],
+              ['max', t('max')],
             ]}
           />
           <Select
-            label="Budget"
+            label={t('filterBudget')}
             value={price}
             onChange={(v) => setPrice(v as PriceBand | 'all')}
             options={[
-              ['all', 'Any price'],
-              ['budget', 'Budget'],
-              ['mid', 'Mid'],
-              ['premium', 'Premium'],
+              ['all', t('anyPrice')],
+              ['budget', t('budgetBand')],
+              ['mid', t('midBand')],
+              ['premium', t('premiumBand')],
             ]}
           />
           <Select
-            label="Sort"
+            label={t('filterSort')}
             value={sort}
             onChange={(v) => setSort(v as typeof sort)}
             options={[
-              ['match', user ? 'Best match' : 'Best match (need profile)'],
-              ['price-asc', 'Price: low → high'],
-              ['price-desc', 'Price: high → low'],
-              ['name', 'Name'],
+              ['match', user ? t('sortMatch') : t('sortMatchNeed')],
+              ['price-asc', t('sortPriceAsc')],
+              ['price-desc', t('sortPriceDesc')],
+              ['name', t('sortName')],
             ]}
           />
         </div>
         <p className="muted filter-count">
-          {filtered.length} shoe{filtered.length === 1 ? '' : 's'}
-          {!user && sort === 'match' ? ' · finish analysis to personalise ranking' : ''}
+          {t(filtered.length === 1 ? 'shoesCount' : 'shoesCountPlural', { count: filtered.length })}
+          {!user && sort === 'match' ? t('finishForRank') : ''}
         </p>
       </div>
 
@@ -153,20 +159,22 @@ export function Catalog() {
                   accent={shoe.accent}
                   imgClassName="catalog-img"
                 />
-                {score != null && <span className="shoe-score">{score}% match</span>}
+                {score != null && (
+                  <span className="shoe-score">{t('matchPct', { score })}</span>
+                )}
               </div>
               <div className="catalog-body">
                 <p className="shoe-brand">{shoe.brand}</p>
                 <h3>{shoe.name}</h3>
                 <p className="shoe-summary">{shoe.summary}</p>
                 <div className="tag-row">
-                  <span className="tag">{shoe.stability}</span>
-                  <span className="tag">{shoe.cushion}</span>
+                  <span className="tag">{labelStab(shoe.stability)}</span>
+                  <span className="tag">{labelCush(shoe.cushion)}</span>
                   <span className="tag">RM {shoe.priceMyr}</span>
                 </div>
                 <div className="card-actions">
                   <Link to={`/results/${shoe.id}`} className="btn btn-secondary btn-sm">
-                    Details
+                    {t('details')}
                   </Link>
                   <div className="card-icon-actions">
                     <button
@@ -174,9 +182,9 @@ export function Catalog() {
                       className={`icon-btn ${saved ? 'active' : ''}`}
                       onClick={() => {
                         toggleShortlist(shoe.id)
-                        toast(saved ? 'Removed from shortlist' : 'Saved to shortlist')
+                        toast(saved ? t('toastRemoved') : t('toastSaved'))
                       }}
-                      aria-label="Shortlist"
+                      aria-label={t('save')}
                     >
                       <Heart size={16} fill={saved ? 'currentColor' : 'none'} />
                     </button>
@@ -185,9 +193,9 @@ export function Catalog() {
                       className={`icon-btn ${comparing ? 'active' : ''}`}
                       onClick={() => {
                         toggleCompare(shoe.id)
-                        toast(comparing ? 'Removed from compare' : 'Added to compare')
+                        toast(comparing ? t('toastCompareRemove') : t('toastCompareAdd'))
                       }}
-                      aria-label="Compare"
+                      aria-label={t('compare')}
                     >
                       <GitCompareArrows size={16} />
                     </button>
@@ -201,8 +209,8 @@ export function Catalog() {
 
       {filtered.length === 0 && (
         <div className="panel center-panel" style={{ marginTop: '1rem' }}>
-          <h2>No shoes match those filters</h2>
-          <p className="muted">Try clearing search or widening surface / budget.</p>
+          <h2>{t('noFilterTitle')}</h2>
+          <p className="muted">{t('noFilterBody')}</p>
         </div>
       )}
     </div>

@@ -1,9 +1,17 @@
 import { ExternalLink, MapPin, Store } from 'lucide-react'
 import { storesMy } from '../data/storesMy'
 import { useI18n } from '../context/I18nContext'
+import type { TranslationKey } from '../i18n/translations'
 
 export function Stores() {
   const { lang, t } = useI18n()
+
+  const typeKey = (type: string): TranslationKey => {
+    if (type === 'mall') return 'storeTypeMall'
+    if (type === 'specialty') return 'storeTypeSpecialty'
+    if (type === 'brand') return 'storeTypeBrand'
+    return 'storeTypeOnline'
+  }
 
   return (
     <div className="page">
@@ -19,7 +27,7 @@ export function Stores() {
         {storesMy.map((s) => (
           <article key={s.id} className="store-card panel">
             <div className="store-card-top">
-              <span className="store-type">{s.type}</span>
+              <span className="store-type">{t(typeKey(s.type))}</span>
               <span className="muted">
                 {s.city}, {s.state}
               </span>
@@ -34,35 +42,19 @@ export function Stores() {
               target="_blank"
               rel="noreferrer"
             >
-              Open in Maps <ExternalLink size={14} />
+              {t('openInMaps')} <ExternalLink size={14} />
             </a>
           </article>
         ))}
       </div>
 
       <div className="panel tip-panel">
-        <h2>{lang === 'ms' ? 'Tips cuba kasut' : 'In-store try-on tips'}</h2>
+        <h2>{t('tryOnTips')}</h2>
         <ul className="plain-list">
-          <li>
-            {lang === 'ms'
-              ? 'Cuba pada petang — kaki sedikit bengkak seperti selepas berlari.'
-              : 'Try shoes in the afternoon — feet are slightly swollen, closer to post-run size.'}
-          </li>
-          <li>
-            {lang === 'ms'
-              ? 'Bawa stokin lari biasa dan, jika ada, kasut lama untuk rujukan haus sole.'
-              : 'Bring your usual running socks and an old pair if you have one (for wear reference).'}
-          </li>
-          <li>
-            {lang === 'ms'
-              ? 'Pastikan kira-kira ibu jari ruang di hadapan jari kaki; berlari 2–3 minit jika dibenarkan.'
-              : 'Leave roughly a thumb’s width at the toe; jog 2–3 minutes if the store allows.'}
-          </li>
-          <li>
-            {lang === 'ms'
-              ? 'Bandingkan harga dan stok di kedai KK / dalam talian sebelum beli.'
-              : 'Compare price and stock at KK shops or online before you buy.'}
-          </li>
+          <li>{t('tryTip1')}</li>
+          <li>{t('tryTip2')}</li>
+          <li>{t('tryTip3')}</li>
+          <li>{t('tryTip4')}</li>
         </ul>
       </div>
     </div>

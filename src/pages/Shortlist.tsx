@@ -7,10 +7,12 @@ import { recommendShoes } from '../lib/recommend'
 import { ShoeCard } from '../components/ShoeCard'
 import { ShoeImage } from '../components/ShoeImage'
 import { useToast } from '../components/Toast'
+import { useI18n } from '../context/I18nContext'
 
 export function Shortlist() {
   const { shortlist, toggleShortlist, toggleCompare, isComparing, asUserProfile } = useProfile()
   const { toast } = useToast()
+  const { t } = useI18n()
   const user = asUserProfile()
 
   const savedShoes = useMemo(
@@ -32,16 +34,14 @@ export function Shortlist() {
       <div className="page narrow">
         <div className="panel center-panel">
           <Heart size={28} className="empty-icon" />
-          <h1>Your shortlist is empty</h1>
-          <p className="muted">
-            Tap the heart on any shoe from Results or Catalog to save it for later.
-          </p>
+          <h1>{t('shortlistEmptyTitle')}</h1>
+          <p className="muted">{t('shortlistEmptyBody')}</p>
           <div className="row-actions" style={{ justifyContent: 'center' }}>
             <Link to="/results" className="btn btn-primary">
-              View matches
+              {t('viewMatches')}
             </Link>
             <Link to="/catalog" className="btn btn-secondary">
-              Browse catalog
+              {t('browseCatalog')}
             </Link>
           </div>
         </div>
@@ -52,11 +52,13 @@ export function Shortlist() {
   return (
     <div className="page">
       <header className="page-header">
-        <p className="eyebrow">Saved</p>
-        <h1>Your shortlist</h1>
+        <p className="eyebrow">{t('shortlistEyebrow')}</p>
+        <h1>{t('shortlistTitle')}</h1>
         <p className="lede">
-          {savedShoes.length} shoe{savedShoes.length === 1 ? '' : 's'} saved on this device.
-          {user ? ' Ranked by your current profile when available.' : ''}
+          {t(savedShoes.length === 1 ? 'shortlistLede' : 'shortlistLedePlural', {
+            count: savedShoes.length,
+            ranked: user ? t('shortlistRanked') : '',
+          })}
         </p>
       </header>
 
@@ -70,10 +72,7 @@ export function Shortlist() {
         <div className="catalog-grid">
           {savedShoes.map((shoe) => (
             <article key={shoe.id} className="catalog-card">
-              <div
-                className="catalog-visual"
-                style={{ background: `linear-gradient(145deg, ${shoe.color}, #0b1220)` }}
-              >
+              <div className="catalog-visual">
                 <ShoeImage
                   src={shoe.image}
                   alt={`${shoe.brand} ${shoe.name}`}
@@ -91,7 +90,7 @@ export function Shortlist() {
                 </div>
                 <div className="card-actions">
                   <Link to={`/results/${shoe.id}`} className="btn btn-secondary btn-sm">
-                    Details
+                    {t('details')}
                   </Link>
                   <div className="card-icon-actions">
                     <button
@@ -99,7 +98,7 @@ export function Shortlist() {
                       className="icon-btn active"
                       onClick={() => {
                         toggleShortlist(shoe.id)
-                        toast('Removed from shortlist')
+                        toast(t('toastRemoved'))
                       }}
                     >
                       <Heart size={16} fill="currentColor" />
@@ -109,7 +108,9 @@ export function Shortlist() {
                       className={`icon-btn ${isComparing(shoe.id) ? 'active' : ''}`}
                       onClick={() => {
                         toggleCompare(shoe.id)
-                        toast(isComparing(shoe.id) ? 'Removed from compare' : 'Added to compare')
+                        toast(
+                          isComparing(shoe.id) ? t('toastCompareRemove') : t('toastCompareAdd'),
+                        )
                       }}
                     >
                       <GitCompareArrows size={16} />
