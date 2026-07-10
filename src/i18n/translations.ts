@@ -12,7 +12,7 @@ export const translations = {
     navStores: 'Stores (MY)',
     ctaFind: 'Find my shoes',
     footer:
-      'StrideMatch is a fitting guide, not medical advice. Photo analysis runs in your browser — images are not uploaded by default. Profile & shortlist stay on this device.',
+      'Photo analysis runs in your browser. Profile & shortlist stay on this device.',
     heroEyebrow: 'Photo-powered shoe matching',
     heroTitle1: 'Find running shoes that actually fit',
     heroTitle2: ' your stride',
@@ -40,7 +40,7 @@ export const translations = {
     navStores: 'Kedai (MY)',
     ctaFind: 'Cari kasut saya',
     footer:
-      'StrideMatch ialah panduan pemasangan, bukan nasihat perubatan. Analisis foto dijalankan dalam pelayar anda — imej tidak dimuat naik secara lalai. Profil & senarai disimpan pada peranti ini.',
+      'Analisis foto dijalankan dalam pelayar anda. Profil & senarai disimpan pada peranti ini.',
     heroEyebrow: 'Padanan kasut berasaskan foto',
     heroTitle1: 'Cari kasut lari yang benar-benar sesuai',
     heroTitle2: ' dengan langkah anda',

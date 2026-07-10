@@ -12,28 +12,40 @@ export interface StoreTip {
 /** Practical starting points for trying running shoes in Malaysia (not sponsored). */
 export const storesMy: StoreTip[] = [
   {
-    id: 'kuching-city-sports',
-    city: 'Kuching',
-    state: 'Sarawak',
-    name: 'City / mall sports retailers (Boulevard, Vivacity, The Spring)',
+    id: 'kk-malls',
+    city: 'Kota Kinabalu',
+    state: 'Sabah',
+    name: 'Imago, Suria Sabah, Centre Point & 1Borneo sports retailers',
     type: 'mall',
     notes:
-      'Good for trying common Nike, adidas, ASICS, and New Balance models. Ask staff for a short treadmill or hallway jog if available.',
+      'Best first stop in KK for Nike, adidas, ASICS, New Balance and other mainstream trainers. Ask staff if you can walk or jog a short loop to check fit.',
     notesMs:
-      'Sesuai untuk cuba model Nike, adidas, ASICS dan New Balance yang biasa. Minta staf benarkan anda berlari sebentar jika ada treadmill.',
-    mapQuery: 'sports shoe store Kuching Sarawak',
+      'Tempat mula terbaik di KK untuk Nike, adidas, ASICS, New Balance dan model popular lain. Minta staf benarkan anda berjalan atau berlari sebentar untuk semak padanan.',
+    mapQuery: 'sports shoe store Kota Kinabalu Imago Suria Sabah',
   },
   {
-    id: 'kuching-specialty',
-    city: 'Kuching',
-    state: 'Sarawak',
-    name: 'Local multi-brand sports shops',
+    id: 'kk-specialty',
+    city: 'Kota Kinabalu',
+    state: 'Sabah',
+    name: 'Local multi-brand & outdoor shops',
     type: 'specialty',
     notes:
-      'Search for independent running/outdoor shops in Kuching for gait advice and trail options (HOKA, Salomon, etc.). Call ahead for stock.',
+      'Look for independent sports and outdoor shops around KK for trail options (HOKA, Salomon, etc.) and more personal fitting advice. Call ahead for stock of specific models.',
     notesMs:
-      'Cari kedai sukan/outdoor di Kuching untuk nasihat gaya lari dan pilihan trail. Telefon dulu untuk stok.',
-    mapQuery: 'running shoe store Kuching',
+      'Cari kedai sukan/outdoor di sekitar KK untuk pilihan trail (HOKA, Salomon, dll.) dan nasihat padanan. Telefon dulu untuk stok model tertentu.',
+    mapQuery: 'running outdoor shoe store Kota Kinabalu',
+  },
+  {
+    id: 'kk-trails',
+    city: 'Kota Kinabalu',
+    state: 'Sabah',
+    name: 'Trail & hiking gear shops',
+    type: 'specialty',
+    notes:
+      'If you run Signal Hill, KK City trails, or head toward Crocker Range / Kinabalu foothills, prioritise shops that stock trail shoes with real grip — not only road trainers.',
+    notesMs:
+      'Jika anda berlari di Signal Hill, trail bandar KK, atau ke arah Crocker Range / kaki Kinabalu, pilih kedai yang stok kasut trail dengan cengkaman sebenar.',
+    mapQuery: 'trail hiking shoes Kota Kinabalu',
   },
   {
     id: 'kl-specialty',
@@ -42,33 +54,21 @@ export const storesMy: StoreTip[] = [
     name: 'Specialty running stores (KL / PJ)',
     type: 'specialty',
     notes:
-      'KL and Petaling Jaya have dedicated running shops that often offer gait checks, brand days, and wider trail/race ranges.',
+      'KL and Petaling Jaya have dedicated running shops with wider race/trail ranges and occasional gait events — useful if you visit Peninsula.',
     notesMs:
-      'KL dan Petaling Jaya ada kedai lari khusus yang kerap tawarkan semakan gait, hari jenama, dan pilihan trail/lumba yang lebih luas.',
+      'KL dan Petaling Jaya ada kedai lari khusus dengan pilihan trail/lumba yang lebih luas — berguna jika anda ke Semenanjung.',
     mapQuery: 'specialty running store Kuala Lumpur',
-  },
-  {
-    id: 'kl-mall',
-    city: 'Kuala Lumpur',
-    state: 'WP Kuala Lumpur',
-    name: 'Brand concept stores & large malls',
-    type: 'brand',
-    notes:
-      'Nike, adidas, ASICS, HOKA, and New Balance flagship or concept stores in major malls (TRX, Pavilion, Mid Valley, 1U, IOI) for fit and latest colourways.',
-    notesMs:
-      'Kedai konsep Nike, adidas, ASICS, HOKA dan New Balance di pusat beli-belah utama untuk padanan saiz dan warna terkini.',
-    mapQuery: 'Nike adidas ASICS store Kuala Lumpur mall',
   },
   {
     id: 'online-my',
     city: 'Malaysia',
     state: 'Nationwide',
-    name: 'Online (Lazada, Shopee, brand sites)',
+    name: 'Online (Shopee, Lazada, brand sites)',
     type: 'online',
     notes:
-      'Convenient for known sizes. Prefer sellers with easy returns. Match the model name from StrideMatch, then verify drop/weight on the product page.',
+      'Handy once you know your size. Prefer sellers with easy returns. Search the exact model name from StrideMatch, then check colourway and size chart.',
     notesMs:
-      'Sesuai jika anda sudah tahu saiz. Pilih penjual dengan pulangan mudah. Padankan nama model dari StrideMatch, lalu semak drop/berat di halaman produk.',
-    mapQuery: 'running shoes Malaysia',
+      'Sesuai jika anda sudah tahu saiz. Pilih penjual dengan pulangan mudah. Cari nama model tepat dari StrideMatch, lalu semak warna dan carta saiz.',
+    mapQuery: 'running shoes Shopee Lazada Malaysia',
   },
 ]

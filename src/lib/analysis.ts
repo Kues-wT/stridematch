@@ -187,7 +187,7 @@ export function combineFootAnalyses(
       `Combined top-down (${t.arch}) and side-view (${s.arch}) estimates → ${arch} arch.`,
       ...t.notes.filter((n) => !n.includes('not a medical')),
       ...s.notes.filter((n) => !n.includes('not a medical')),
-      'This is a visual estimate only — not a medical diagnosis.',
+      'Combined both photos for a clearer arch reading — tweak it if needed.',
     ].slice(0, 6),
     previewDataUrl: t.previewDataUrl || s.previewDataUrl,
     mode: 'combined',
@@ -245,7 +245,7 @@ function analyzeTopDown(
   else if (widthHint === 'narrow') notes.push('Forefoot outline appears relatively narrow.')
   else notes.push('Foot width looks about average from this angle.')
 
-  notes.push('This is a visual estimate only — not a medical diagnosis. Confirm how your feet feel.')
+  notes.push('You can adjust the result on the next screen if it doesn’t match how your feet feel.')
 
   ctx.strokeStyle = 'rgba(163, 230, 53, 0.85)'
   ctx.lineWidth = 2
@@ -354,7 +354,7 @@ function analyzeSideView(
 
   notes.push(`Estimated arch clearance ratio: ${(sideArchRatio * 100).toFixed(0)}% of foot height.`)
   notes.push('Shoot from the inside of the foot, phone level with the ankle, full sole on the floor.')
-  notes.push('This is a visual estimate only — not a medical diagnosis.')
+  notes.push('Side-view reading is a guide — adjust on the next screen if needed.')
 
   // Guides
   ctx.strokeStyle = 'rgba(163, 230, 53, 0.9)'

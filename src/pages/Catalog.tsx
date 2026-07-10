@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, GitCompareArrows, Heart } from 'lucide-react'
+import { Search, GitCompareArrows, Heart, ChevronDown } from 'lucide-react'
 import { shoes, type Cushion, type PriceBand, type Stability, type Surface } from '../data/shoes'
 import { useProfile } from '../context/ProfileContext'
 import { recommendShoes } from '../lib/recommend'
@@ -46,7 +46,6 @@ export function Catalog() {
       if (sort === 'price-asc') return a.priceMyr - b.priceMyr
       if (sort === 'price-desc') return b.priceMyr - a.priceMyr
       if (sort === 'name') return a.name.localeCompare(b.name)
-      // match
       const sa = scoreMap.get(a.id) ?? -1
       const sb = scoreMap.get(b.id) ?? -1
       if (sa !== sb) return sb - sa
@@ -61,8 +60,8 @@ export function Catalog() {
         <p className="eyebrow">Browse</p>
         <h1>Shoe catalog</h1>
         <p className="lede">
-          Explore the full sample lineup. Filter by surface, support, and budget
-          {user ? ' — sorted by your match score when available.' : '.'}
+          Popular road & trail models with clear filters for surface, support, and budget
+          {user ? ' — ranked for your profile when available.' : '.'}
         </p>
       </header>
 
@@ -136,7 +135,7 @@ export function Catalog() {
         </div>
         <p className="muted filter-count">
           {filtered.length} shoe{filtered.length === 1 ? '' : 's'}
-          {!user && sort === 'match' ? ' · complete analysis to unlock personal ranking' : ''}
+          {!user && sort === 'match' ? ' · finish analysis to personalise ranking' : ''}
         </p>
       </div>
 
@@ -147,10 +146,7 @@ export function Catalog() {
           const comparing = isComparing(shoe.id)
           return (
             <article key={shoe.id} className="catalog-card">
-              <div
-                className="catalog-visual"
-                style={{ background: `linear-gradient(145deg, ${shoe.color}, #0b1220)` }}
-              >
+              <div className="catalog-visual">
                 <ShoeImage
                   src={shoe.image}
                   alt={`${shoe.brand} ${shoe.name}`}
@@ -227,13 +223,16 @@ function Select({
   return (
     <label className="select-field">
       <span>{label}</span>
-      <select value={value} onChange={(e) => onChange(e.target.value)}>
-        {options.map(([v, text]) => (
-          <option key={v} value={v}>
-            {text}
-          </option>
-        ))}
-      </select>
+      <div className="select-shell">
+        <select value={value} onChange={(e) => onChange(e.target.value)}>
+          {options.map(([v, text]) => (
+            <option key={v} value={v}>
+              {text}
+            </option>
+          ))}
+        </select>
+        <ChevronDown className="select-chevron" size={16} aria-hidden />
+      </div>
     </label>
   )
 }

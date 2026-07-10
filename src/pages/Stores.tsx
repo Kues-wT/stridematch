@@ -60,8 +60,8 @@ export function Stores() {
           </li>
           <li>
             {lang === 'ms'
-              ? 'Harga MYR dalam app adalah anggaran — bandingkan promosi kedai tempatan.'
-              : 'MYR prices in the app are estimates — compare with local promotions.'}
+              ? 'Bandingkan harga dan stok di kedai KK / dalam talian sebelum beli.'
+              : 'Compare price and stock at KK shops or online before you buy.'}
           </li>
         </ul>
       </div>

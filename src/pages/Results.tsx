@@ -118,10 +118,7 @@ export function Results() {
         ))}
       </div>
 
-      <p className="disclaimer">
-        StrideMatch is a consumer fitting guide. If you have pain, injury, or a medical condition,
-        consult a qualified professional or specialty running store before purchasing.
-      </p>
+      
     </div>
   )
 }

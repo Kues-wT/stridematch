@@ -8,8 +8,8 @@ export function HowItWorks() {
         <p className="eyebrow">Transparent by design</p>
         <h1>How StrideMatch works</h1>
         <p className="lede">
-          We combine multi-photo foot estimates with a short running profile quiz, then score real
-          shoe models against what matters for fit and feel.
+          We combine multi-photo foot analysis with a short running profile quiz, then score real
+          shoe models on fit, support, cushion, surface, and budget.
         </p>
       </header>
 
@@ -83,9 +83,8 @@ export function HowItWorks() {
           <div>
             <h2>Privacy & safety</h2>
             <p>
-              Photo pixels are processed locally with the Canvas API. Images are not uploaded or
-              persisted. Recommendations are educational and do not replace a clinician or specialty
-              running store assessment for pain or injury.
+              Photo processing stays on your device. Use StrideMatch to shortlist models, then try
+              them on in a store when you can — especially for trail routes around KK.
             </p>
           </div>
         </section>

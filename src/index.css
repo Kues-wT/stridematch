@@ -718,32 +718,40 @@ img {
 .shoe-photo-wrap {
   width: 100%;
   height: 100%;
-  min-height: 140px;
+  min-height: 150px;
   display: grid;
   place-items: center;
-  padding: 0.75rem;
+  padding: 0.85rem 1rem;
 }
 
 .shoe-photo {
   width: 100%;
   height: 100%;
-  max-height: 180px;
+  max-height: 200px;
   object-fit: contain;
-  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
+  object-position: center;
+  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.12));
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.catalog-card:hover .shoe-photo,
+.shoe-card:hover .shoe-photo {
+  transform: scale(1.03);
 }
 
 .shoe-card-img,
 .catalog-img {
-  max-height: 160px;
+  max-height: 180px;
 }
 
 .detail-img {
-  max-height: 260px;
-  max-width: min(420px, 92%);
+  max-height: 300px;
+  max-width: min(460px, 94%);
 }
 
 .compare-head-img {
-  max-height: 80px;
+  max-height: 88px;
 }
 
 .chip-img {
@@ -762,13 +770,38 @@ img {
 .shoe-visual,
 .detail-hero,
 .compare-head-visual {
-  background-color: #f8fafc !important;
-  background-image: none !important;
+  background-color: #ffffff !important;
+  background-image:
+    radial-gradient(circle at 50% 100%, rgba(148, 163, 184, 0.12), transparent 55%) !important;
+}
+
+.catalog-visual {
+  min-height: 190px;
+  padding: 1.1rem 1rem 0.85rem;
+}
+
+.shoe-visual {
+  min-height: 190px;
 }
 
 .detail-hero {
-  min-height: 260px;
-  padding: 1.25rem;
+  min-height: 280px;
+  padding: 1.5rem;
+}
+
+/* Keep rank/score readable on white photo cards */
+.shoe-rank,
+.catalog-visual .shoe-score,
+.shoe-visual .shoe-score {
+  background: rgba(15, 23, 42, 0.82);
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+.shoe-visual .shoe-score,
+.catalog-visual .shoe-score {
+  color: var(--accent);
+  border-color: var(--border-strong);
 }
 
 .shoe-body {
@@ -1339,16 +1372,41 @@ img {
   letter-spacing: 0.04em;
 }
 
+.select-shell {
+  position: relative;
+  display: block;
+}
+
 .select-field select {
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--bg-soft);
   color: var(--text);
-  padding: 0.55rem 0.7rem;
+  padding: 0.65rem 2.25rem 0.65rem 0.8rem;
   font-size: 0.9rem;
   text-transform: none;
   letter-spacing: 0;
+  cursor: pointer;
+}
+
+.select-field select:hover,
+.select-field select:focus {
+  border-color: rgba(163, 230, 53, 0.45);
+  outline: none;
+}
+
+.select-chevron {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-text);
+  pointer-events: none;
+  opacity: 0.95;
 }
 
 .filter-count {

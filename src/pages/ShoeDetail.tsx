@@ -72,10 +72,7 @@ export function ShoeDetail() {
           <p className="shoe-brand">{shoe.brand}</p>
           <h1>{shoe.name}</h1>
           <p className="lede">{shoe.summary}</p>
-          <p className="price">
-            ~RM {shoe.priceMyr}
-            <span className="price-note"> estimated MY street price</span>
-          </p>
+          <p className="price">RM {shoe.priceMyr}</p>
 
           <div className="row-actions" style={{ marginTop: 0, marginBottom: '1.25rem' }}>
             <a
@@ -174,11 +171,6 @@ export function ShoeDetail() {
               </ul>
             </>
           )}
-
-          <p className="muted catalog-disclaimer">
-            Model attributes are simplified for matching. Specs and MYR prices change by colourway
-            and retailer — confirm before buying.
-          </p>
 
           <div className="row-actions">
             <Link to="/analyze" className="btn btn-secondary">
