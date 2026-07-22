@@ -547,6 +547,55 @@ img {
   margin: 0;
 }
 
+.trust-banner {
+  margin: 0 0 1.15rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(163, 230, 53, 0.28);
+  background: linear-gradient(135deg, rgba(163, 230, 53, 0.12), rgba(56, 189, 248, 0.06));
+}
+
+.trust-banner strong {
+  display: block;
+  color: var(--accent-text);
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+.trust-banner p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.confirm-callout {
+  margin: 0 0 1.15rem;
+  padding: 1rem 1.05rem;
+  border-radius: 16px;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.confirm-callout-title {
+  margin: 0 0 0.4rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #fde68a;
+}
+
+.confirm-callout .muted {
+  margin-bottom: 0.55rem;
+}
+
+.confirm-callout-cta {
+  margin: 0;
+  font-weight: 650;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
 .tip-box {
   display: flex;
   gap: 0.75rem;
@@ -556,6 +605,17 @@ img {
   border: 1px solid rgba(56, 189, 248, 0.18);
   color: #bae6fd;
   margin-bottom: 1rem;
+}
+
+.tip-box-strong {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.tip-lead {
+  margin: 0.35rem 0 0.45rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .tip-box ul {

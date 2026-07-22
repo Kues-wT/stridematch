@@ -1,16 +1,6 @@
 import { useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Camera,
-  ImagePlus,
-  Loader2,
-  RefreshCw,
-  ArrowRight,
-  Lightbulb,
-  Footprints,
-  PersonStanding,
-  SportShoe,
-} from 'lucide-react'
+import { Camera, ImagePlus, Loader2, RefreshCw, ArrowRight, Lightbulb, Footprints, PersonStanding } from 'lucide-react'
 import {
   analyzeFootPhoto,
   analyzeWearPhoto,
@@ -216,6 +206,11 @@ export function Analyze() {
 
       {step === 0 && (
         <section className="panel">
+          <div className="trust-banner" role="note">
+            <strong>{t('photoTrustTitle')}</strong>
+            <p>{t('photoTrustBody')}</p>
+          </div>
+
           <h2>{t('photoSectionTitle')}</h2>
           <p className="muted">{t('photoSectionBody')}</p>
 
@@ -248,7 +243,7 @@ export function Analyze() {
             />
             <PhotoSlot
               title={t('photoWearTitle')}
-              icon={<SportShoe size={20} />}
+              icon={<Footprints size={20} />}
               hint={t('photoWearHint')}
               busy={busy === 'wear'}
               preview={wearResult?.previewDataUrl || wearPreview}
@@ -261,14 +256,17 @@ export function Analyze() {
             />
           </div>
 
-          <div className="tip-box">
+          <div className="tip-box tip-box-strong">
             <Lightbulb size={18} />
             <div>
               <strong>{t('photoTips')}</strong>
+              <p className="tip-lead">{t('photoTipsLead')}</p>
               <ul>
                 <li>{t('photoTip1')}</li>
                 <li>{t('photoTip2')}</li>
                 <li>{t('photoTip3')}</li>
+                <li>{t('photoTip4')}</li>
+                <li>{t('photoTip5')}</li>
               </ul>
             </div>
           </div>
@@ -293,15 +291,20 @@ export function Analyze() {
       {step === 1 && (
         <section className="panel">
           <h2>{t('confirmTitle')}</h2>
-          <p className="muted">
-            {analysis
-              ? t('confirmWithPhoto', {
-                  arch: archWord(analysis.arch),
-                  confidence: Math.round(analysis.archConfidence * 100),
-                  mode: analysis.mode,
-                })
-              : t('confirmNoPhoto')}
-          </p>
+
+          <div className="confirm-callout">
+            <p className="confirm-callout-title">{t('confirmAdjustTitle')}</p>
+            <p className="muted">
+              {analysis
+                ? t('confirmWithPhoto', {
+                    arch: archWord(analysis.arch),
+                    confidence: Math.round(analysis.archConfidence * 100),
+                    mode: analysis.mode,
+                  })
+                : t('confirmNoPhoto')}
+            </p>
+            <p className="confirm-callout-cta">{t('confirmAdjustBody')}</p>
+          </div>
 
           {(analysis?.previewDataUrl || photoPreview || sidePreview || wearPreview) && (
             <div className="preview-mosaic">

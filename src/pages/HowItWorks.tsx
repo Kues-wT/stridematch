@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Camera, BrainCircuit, ListChecks, Shield, Footprints, SportShoe } from 'lucide-react'
+import { Camera, BrainCircuit, ListChecks, Shield, Footprints } from 'lucide-react'
 import { useI18n } from '../context/I18nContext'
 
 export function HowItWorks() {
@@ -31,7 +31,7 @@ export function HowItWorks() {
         </section>
 
         <section className="info-card">
-          <SportShoe size={22} className="info-icon" />
+          <Footprints size={22} className="info-icon" />
           <div>
             <h2>{t('howWearTitle')}</h2>
             <p>{t('howWearBody')}</p>
