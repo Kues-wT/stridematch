@@ -33,7 +33,7 @@ export function Results() {
   }, [hydrated])
 
   const user = asUserProfile()
-  const matches = useMemo(() => (user ? recommendShoes(user, 5) : []), [user])
+  const matches = useMemo(() => (user ? recommendShoes(user, 6) : []), [user])
 
   if (!hydrated) {
     return (

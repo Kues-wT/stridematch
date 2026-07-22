@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Check, ExternalLink, GitCompareArrows, Heart } from 'lucide-react'
-import { shoes } from '../data/shoes'
+import { lazadaSearchUrl, shoes, shopeeSearchUrl } from '../data/shoes'
 import { useProfile } from '../context/ProfileContext'
 import { recommendShoes } from '../lib/recommend'
 import { useMemo } from 'react'
@@ -91,7 +91,23 @@ export function ShoeDetail() {
             <a className="btn btn-primary" href={shoe.buyUrl} target="_blank" rel="noreferrer">
               {t('researchBuy')} <ExternalLink size={16} />
             </a>
-            <a className="btn btn-secondary" href={shoe.officialUrl} target="_blank" rel="noreferrer">
+            <a
+              className="btn btn-secondary"
+              href={shopeeSearchUrl(shoe)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t('searchShopee')} <ExternalLink size={16} />
+            </a>
+            <a
+              className="btn btn-secondary"
+              href={lazadaSearchUrl(shoe)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t('searchLazada')} <ExternalLink size={16} />
+            </a>
+            <a className="btn btn-ghost" href={shoe.officialUrl} target="_blank" rel="noreferrer">
               {t('officialSite')}
             </a>
           </div>

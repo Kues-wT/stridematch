@@ -16,11 +16,17 @@ export function Catalog() {
   const user = asUserProfile()
 
   const [q, setQ] = useState('')
+  const [brand, setBrand] = useState<string>('all')
   const [surface, setSurface] = useState<Surface | 'all'>('all')
   const [stability, setStability] = useState<Stability | 'all'>('all')
   const [cushion, setCushion] = useState<Cushion | 'all'>('all')
   const [price, setPrice] = useState<PriceBand | 'all'>('all')
   const [sort, setSort] = useState<'match' | 'price-asc' | 'price-desc' | 'name'>('match')
+
+  const brands = useMemo(
+    () => [...new Set(shoes.map((s) => s.brand))].sort((a, b) => a.localeCompare(b)),
+    [],
+  )
 
   const scoreMap = useMemo(() => {
     const map = new Map<string, number>()
@@ -40,6 +46,7 @@ export function Catalog() {
           s.bestFor.some((b) => b.toLowerCase().includes(query)),
       )
     }
+    if (brand !== 'all') list = list.filter((s) => s.brand === brand)
     if (surface !== 'all') list = list.filter((s) => s.surfaces.includes(surface))
     if (stability !== 'all') list = list.filter((s) => s.stability === stability)
     if (cushion !== 'all') list = list.filter((s) => s.cushion === cushion)
@@ -55,7 +62,7 @@ export function Catalog() {
       return a.name.localeCompare(b.name)
     })
     return list
-  }, [q, surface, stability, cushion, price, sort, scoreMap])
+  }, [q, brand, surface, stability, cushion, price, sort, scoreMap])
 
   const labelStab = (v: string) =>
     v === 'motion-control' ? t('motionControl') : t(v as TranslationKey)
@@ -82,6 +89,12 @@ export function Catalog() {
           />
         </label>
         <div className="filter-row">
+          <Select
+            label={t('filterBrand')}
+            value={brand}
+            onChange={setBrand}
+            options={[['all', t('allBrands')], ...brands.map((b) => [b, b] as [string, string])]}
+          />
           <Select
             label={t('filterSurface')}
             value={surface}
