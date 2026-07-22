@@ -15,7 +15,7 @@ const en = {
   heroTitle1: 'Find running shoes that actually fit',
   heroTitle2: ' your stride',
   heroLede:
-    'Stop guessing at the shoe wall. In about two minutes, get a ranked shortlist matched to your feet, how you run, and your budget — with clear reasons in MYR.',
+    'Every great run starts with the right pair of shoes .Stop guessing the shoe options. Find the perfect pair of shoes in 2 minutes',
   startAnalysis: 'Start foot analysis',
   menuOpen: 'Open menu',
   menuClose: 'Close menu',
@@ -354,7 +354,7 @@ const ms: Dict = {
   heroTitle1: 'Cari kasut lari yang benar-benar sesuai',
   heroTitle2: ' dengan langkah anda',
   heroLede:
-    'Berhenti meneka di rak kasut. Dalam kira-kira dua minit, dapatkan senarai berperingkat mengikut kaki anda, cara anda berlari, dan bajet — dengan sebab yang jelas dalam MYR.',
+    'Setiap larian hebat bermula dengan pasangan kasut yang tepat. Berhenti meneka di pilihan kasut anda. Cari kasut yang sesuai dalam 2 minit.',
   startAnalysis: 'Mula analisis kaki',
   menuOpen: 'Buka menu',
   menuClose: 'Tutup menu',
