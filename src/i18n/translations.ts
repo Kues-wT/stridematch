@@ -15,7 +15,7 @@ const en = {
   heroTitle1: 'Find running shoes that actually fit',
   heroTitle2: ' your stride',
   heroLede:
-    'Every great run starts with the right pair of shoes .Stop guessing the shoe options. Find the perfect pair of shoes in 2 minutes',
+    'Every great run starts with the right pair of shoes. Stop guessing the shoe options. Find the perfect pair of shoes in 2 minutes',
   startAnalysis: 'Start foot analysis',
   menuOpen: 'Open menu',
   menuClose: 'Close menu',
@@ -29,7 +29,7 @@ const en = {
   langMs: 'BM',
   storesTitle: 'Where to try shoes in Malaysia',
   storesLede:
-    'Online matching is a starting point. For first-time buyers, try shoes in person in KK when you can.',
+    'Online matching is a starting point. For first-time buyers, try shoes in person at nearby store when you possible.',
   // shared
   back: 'Back',
   continue: 'Continue',
@@ -368,7 +368,7 @@ const ms: Dict = {
   langMs: 'BM',
   storesTitle: 'Di mana cuba kasut di Malaysia',
   storesLede:
-    'Padanan dalam talian hanyalah titik mula. Untuk pembeli baru, cuba kasut di kedai KK bila boleh.',
+    'Padanan dalam talian hanyalah titik mula. Untuk pembeli baru, cuba kasut di kedai berhampiran jika boleh.',
   back: 'Kembali',
   continue: 'Teruskan',
   details: 'Butiran',
