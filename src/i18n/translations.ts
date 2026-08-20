@@ -343,6 +343,37 @@ const en = {
   fitBarOverall: 'Overall match',
   // tags
   cushionTag: '{{value}} cushion',
+  // tester feedback (moderated user tests)
+  feedbackTitle: 'Was this a good match?',
+  feedbackLede:
+    'One quick answer helps us tune the recommendations. Your answer stays on this device.',
+  feedbackSpotOn: 'Spot on',
+  feedbackClose: 'Close, not quite',
+  feedbackOff: 'Way off',
+  feedbackWouldTry: 'Which pair would you actually try on?',
+  feedbackWouldTryNone: 'None of these',
+  feedbackNote: 'Anything else? (optional)',
+  feedbackNotePlaceholder: 'Too expensive, wrong width, already own it…',
+  feedbackSubmit: 'Send feedback',
+  feedbackPickRating: 'Pick one option first.',
+  feedbackThanksTitle: 'Thanks — noted.',
+  feedbackThanksBody: 'Saved on this device. The facilitator can export it after the session.',
+  feedbackAgain: 'Change my answer',
+  feedbackAdminEyebrow: 'Facilitator view',
+  feedbackAdminTitle: 'Tester feedback',
+  feedbackAdminLede:
+    'Responses collected on this device. Nothing is uploaded — export before clearing the browser or handing the phone back.',
+  feedbackAdminEmptyTitle: 'No feedback yet',
+  feedbackAdminEmptyBody:
+    'Responses appear here once a tester finishes a run-through and answers the prompt under their results.',
+  feedbackCount: 'responses',
+  feedbackCopyCsv: 'Copy CSV',
+  feedbackDownloadCsv: 'Download CSV',
+  feedbackCopyJson: 'Copy JSON',
+  feedbackClear: 'Clear all',
+  feedbackClearConfirm: 'Delete all saved feedback on this device?',
+  feedbackCleared: 'Feedback cleared.',
+  feedbackCopied: 'Copied to clipboard.',
 } as const
 
 type Dict = { [K in keyof typeof en]: string }
@@ -678,6 +709,38 @@ const ms: Dict = {
   fitBarBudget: 'Bajet',
   fitBarOverall: 'Padanan keseluruhan',
   cushionTag: 'kusyen {{value}}',
+  // maklum balas penguji (ujian pengguna)
+  feedbackTitle: 'Adakah padanan ini tepat?',
+  feedbackLede:
+    'Satu jawapan ringkas membantu kami menala cadangan. Jawapan anda kekal pada peranti ini.',
+  feedbackSpotOn: 'Tepat sekali',
+  feedbackClose: 'Hampir tepat',
+  feedbackOff: 'Jauh tersasar',
+  feedbackWouldTry: 'Pasangan mana yang anda benar-benar mahu cuba?',
+  feedbackWouldTryNone: 'Tiada satu pun',
+  feedbackNote: 'Ada apa-apa lagi? (pilihan)',
+  feedbackNotePlaceholder: 'Terlalu mahal, saiz lebar tak kena, sudah ada…',
+  feedbackSubmit: 'Hantar maklum balas',
+  feedbackPickRating: 'Pilih satu pilihan dahulu.',
+  feedbackThanksTitle: 'Terima kasih — sudah direkod.',
+  feedbackThanksBody:
+    'Disimpan pada peranti ini. Fasilitator boleh mengeksportnya selepas sesi.',
+  feedbackAgain: 'Tukar jawapan saya',
+  feedbackAdminEyebrow: 'Paparan fasilitator',
+  feedbackAdminTitle: 'Maklum balas penguji',
+  feedbackAdminLede:
+    'Jawapan yang dikumpul pada peranti ini. Tiada apa-apa dimuat naik — eksport sebelum membersihkan pelayar atau memulangkan telefon.',
+  feedbackAdminEmptyTitle: 'Belum ada maklum balas',
+  feedbackAdminEmptyBody:
+    'Jawapan akan muncul di sini sebaik penguji menyelesaikan satu pusingan dan menjawab soalan di bawah keputusan mereka.',
+  feedbackCount: 'jawapan',
+  feedbackCopyCsv: 'Salin CSV',
+  feedbackDownloadCsv: 'Muat turun CSV',
+  feedbackCopyJson: 'Salin JSON',
+  feedbackClear: 'Padam semua',
+  feedbackClearConfirm: 'Padam semua maklum balas yang disimpan pada peranti ini?',
+  feedbackCleared: 'Maklum balas dipadam.',
+  feedbackCopied: 'Disalin ke papan klip.',
 }
 
 export const translations = { en, ms } as const

@@ -4,6 +4,7 @@ import { Link2, RotateCcw, Share2 } from 'lucide-react'
 import { useProfile } from '../context/ProfileContext'
 import { recommendShoes } from '../lib/recommend'
 import { ShoeCard } from '../components/ShoeCard'
+import { FeedbackPrompt } from '../components/FeedbackPrompt'
 import { buildShareUrl, decodeShare, profileToShare } from '../lib/share'
 import { useToast } from '../components/Toast'
 import { useI18n } from '../context/I18nContext'
@@ -141,6 +142,8 @@ export function Results() {
           <ShoeCard key={m.shoe.id} match={m} rank={i + 1} showFitBars />
         ))}
       </div>
+
+      {matches.length > 0 && <FeedbackPrompt matches={matches} profile={user} />}
     </div>
   )
 }
