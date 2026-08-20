@@ -10,6 +10,7 @@
     "dev": "vite",
     "build": "node ./node_modules/typescript/lib/tsc.js -b && node ./node_modules/vite/bin/vite.js build",
     "lint": "oxlint",
+    "audit:photos": "node ./scripts/audit-photos.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
