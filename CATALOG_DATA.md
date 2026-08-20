@@ -86,13 +86,60 @@ overpronating beginner on a budget a real answer (it now tops that persona at 88
 cheapest option used to be RM 589), and the Launch GTS 12 plus Supernova Solution 3 add
 mid-priced support between it and the Adrenaline.
 
+## Sub-RM300 tier (added 2026-08)
+
+Nine shoes now sit under RM 300, prices checked against Malaysian retailers:
+
+| Shoe | RM | Note |
+|---|---|---|
+| adidas Galaxy 7 | 199 | adidas MY RM 229, often ~RM 160 |
+| Nike Revolution 7 | 209 | RM 235 list, Sports Direct RM 165 |
+| ASICS Patriot 13 | 229 | RM 249 list, Zalora RM 174 |
+| New Balance 411v3 | 249 | NB MY RM 299, Sports Direct RM 149–209 |
+| ASICS Novablast 4 | 299 | repriced — Sports Direct RM 289 |
+
+(plus the existing Runfalcon 5, Duramo SL 2, Downshifter 13 and Gel-Contend 9)
+
+The 411v3 is deliberately described as a walk-run and gym shoe, not a training tool. There is
+still **no stability shoe under RM 300** — the cheapest is the GT-1000 14 at RM 429. That
+appears to be a real market gap rather than a catalog omission.
+
+## Last-generation models: keep or drop?
+
+Policy: **keep a superseded model if it is still sold in Malaysia, and reprice it to what it
+actually costs now.** Clearance stock is often the best value on the whole site, and pricing it
+at last year's RRP would hide that from budget users.
+
+Checked 2026-08 — all four are still widely available, so all four stay:
+
+| Shoe | Was | Now | Evidence |
+|---|---|---|---|
+| Nike Pegasus 41 | RM 619 | **RM 369** | JD Sports MY RM 370, Sports Direct RM 305 |
+| ASICS Novablast 4 | RM 499 | **RM 299** | Sports Direct RM 289, Topper clearance |
+| ASICS SUPERBLAST 2 | RM 899 | **RM 749** | Running Lab MY RM 679–849 |
+| Xtep 160X 3.0 Pro | RM 499 | **RM 549** | Shopee MY RM 520–1,099 |
+
+Re-run this check periodically: when a model stops appearing on Shopee/Lazada/Sports Direct MY,
+delete the entry and its photo.
+
 ## Known catalog gaps
 
-- **7 of the new shoes have no photo yet** — they render the built-in silhouette until one is
-  added. Run `npm run audit:photos` for the list.
-- Several catalog entries are now a generation behind: SUPERBLAST 2 (v3 added alongside),
-  Pegasus 41 (42 added alongside), GT-1000 15 and Xtep 160X 7.0 exist but are unverified.
+- **5 shoes have no photo** (Launch GTS 12, Supernova Solution 3, Triumph 23, 160X 6.0 Pro,
+  411v3) and **5 are still low-res**. They render the built-in silhouette or a soft image.
+  Run `npm run audit:photos` for the current list.
+- No stability shoe under RM 300 (see above).
+- GT-1000 15 and Xtep 160X 7.0 exist but were not verified for MY availability.
 - HOKA and Saucony entries have not had a spec-by-spec review.
+
+## Sourcing photos (what works)
+
+Image search returns the wrong generation surprisingly often — "Superblast 2" gives Superblast 3
+shots, "Triumph 23" gives Triumph 20/22, "Solarboost 5" gives the 2018 Solarboost. What worked:
+
+- Search for the **brand CDN or SKU**: `images.asics.com 1013A177`, `assets.adidas.com`,
+  `static.nike.com`, `nb.scene7.com`, or retailer CDNs (grivetoutdoors, fit2run, bigshoes).
+- Check the shoe's own name on the heel or midsole in the photo before using it.
+- Convert to real JPEG afterwards — many CDNs serve WebP/AVIF, which breaks older iOS.
 
 ## Adding or removing a shoe
 
