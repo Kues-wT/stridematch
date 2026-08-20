@@ -64,8 +64,8 @@ Look for patterns, not one-offs:
 - Repeated "way off" from the same profile shape → a scoring weight to revisit in
   `src/lib/recommend.ts`.
 - Everyone picking shoe #3 over #1 → ranking or copy problem, not a catalog problem.
-- "Too expensive" recurring → a catalog gap. There is currently **no budget-priced
-  stability shoe** (see CATALOG_DATA.md), which bites overpronating beginners.
+- "Too expensive" recurring → a catalog gap. Cheapest support option is now the ASICS
+  GT-1000 14 at ~RM 429; below that the catalog is neutral-only (see CATALOG_DATA.md).
 - Confusion at the confirm step → wording, not scoring.
 
 Only add affiliate links after testing is done and the matching feels right — see

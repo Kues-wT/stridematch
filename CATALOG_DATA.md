@@ -40,7 +40,7 @@ otherwise                ->  'medium'
 |---|---|
 | Nike · ASICS · adidas | Calibrated earlier from lab/review sources |
 | **Brooks · New Balance · Xtep** | **Calibrated 2026-08** — drop, weight, cushion/stability class, summaries |
-| HOKA · Saucony | Global score calibration only — specs not individually re-checked |
+| HOKA · Saucony | Global score calibration only — except the 2026-08 additions below |
 
 ### What changed in the Brooks / NB / Xtep pass
 
@@ -65,10 +65,33 @@ Corrections worth knowing about (published spec vs. what the catalog previously 
 Xtep publishes limited data for the domestic 2000km / One Piece models; those entries say so
 in their highlights rather than implying lab precision.
 
+## Added 2026-08 (8 shoes, 67 total)
+
+Specs from brand data and lab reviews; MYR figures are street/promo estimates, not RRP.
+Nike Pegasus 42 is priced from Nike Malaysia's own listing (RM 609).
+
+| Shoe | RM | Class | Drop / weight | Why it's here |
+|---|---|---|---|---|
+| ASICS GT-1000 14 | 429 | stability, balanced | 8 mm / 268 g | Cheapest real stability shoe — closes the budget gap |
+| Brooks Launch GTS 12 | 519 | stability, firm | 8 mm / 258 g | Light stability, cheaper than the Adrenaline |
+| adidas Supernova Solution 3 | 589 | stability, balanced | 8 mm / 280 g | PEBA stability with support rods |
+| Nike Pegasus 42 | 609 | neutral, balanced | 10 mm / 300 g | Current Pegasus, full-length Air Zoom |
+| HOKA Rincon 4 | 529 | neutral, balanced | 5 mm / 228 g | Light, low-cost tempo option |
+| Saucony Triumph 23 | 749 | neutral, max | 10 mm / 263 g | Light premium plush trainer |
+| ASICS SUPERBLAST 3 | 949 | neutral, max | 8 mm / 239 g | Current gen of the SUPERBLAST |
+| Xtep 160X 6.0 Pro | 699 | neutral, firm | 6 mm / 210 g | Current Xtep flagship racer |
+
+Three of these fill scoring gaps rather than just adding names: the GT-1000 14 gives an
+overpronating beginner on a budget a real answer (it now tops that persona at 88%, where the
+cheapest option used to be RM 589), and the Launch GTS 12 plus Supernova Solution 3 add
+mid-priced support between it and the Adrenaline.
+
 ## Known catalog gaps
 
-- **No budget-priced stability shoe.** An overpronating beginner on a budget currently matches
-  RM 589–649 shoes. Something like the ASICS GT-1000 13 (~RM 429) would close it.
+- **7 of the new shoes have no photo yet** — they render the built-in silhouette until one is
+  added. Run `npm run audit:photos` for the list.
+- Several catalog entries are now a generation behind: SUPERBLAST 2 (v3 added alongside),
+  Pegasus 41 (42 added alongside), GT-1000 15 and Xtep 160X 7.0 exist but are unverified.
 - HOKA and Saucony entries have not had a spec-by-spec review.
 
 ## Adding or removing a shoe
