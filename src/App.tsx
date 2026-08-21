@@ -12,6 +12,7 @@ import { Catalog } from './pages/Catalog'
 import { Shortlist } from './pages/Shortlist'
 import { Compare } from './pages/Compare'
 import { Stores } from './pages/Stores'
+import { Feedback } from './pages/Feedback'
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
                 <Route path="compare" element={<Compare />} />
                 <Route path="stores" element={<Stores />} />
                 <Route path="how-it-works" element={<HowItWorks />} />
+                <Route path="feedback" element={<Feedback />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
             </Routes>

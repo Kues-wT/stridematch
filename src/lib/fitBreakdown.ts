@@ -17,6 +17,7 @@ export function getFitBreakdown(shoe: Shoe, profile: UserProfile): FitDimension[
   const full = recommendShoes(profile, shoesLimit()).find((m) => m.shoe.id === shoe.id)
   const overall = full?.score ?? 50
 
+  // Rows = runner's arch, columns = arch profile the shoe is built for.
   // Cap exact matches below 100 so multiple bars don’t all read “perfect”
   const archMap = {
     low: { low: 93, medium: 62, high: 22 },
