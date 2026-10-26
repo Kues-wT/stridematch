@@ -114,6 +114,17 @@ export function Results() {
             saved: fromShare ? t('fromShare') : t('profileSaved'),
           })}
         </p>
+        {profile.footMeasure && (
+          <p className="results-size">
+            {t('resultsSize', {
+              eu: profile.footMeasure.size.eu,
+              uk: profile.footMeasure.size.ukMen,
+              us: profile.footMeasure.size.usMen,
+              usw: profile.footMeasure.size.usWomen,
+              length: profile.footMeasure.lengthMm,
+            })}
+          </p>
+        )}
         <div className="row-actions">
           <button
             type="button"

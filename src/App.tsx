@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { syncFeedback } from './lib/feedback'
 import { ProfileProvider } from './context/ProfileContext'
 import { I18nProvider } from './context/I18nContext'
 import { ToastProvider } from './components/Toast'
@@ -15,6 +17,14 @@ import { Stores } from './pages/Stores'
 import { Feedback } from './pages/Feedback'
 
 export default function App() {
+  // Send any feedback that was saved while offline
+  useEffect(() => {
+    void syncFeedback()
+    const onOnline = () => void syncFeedback()
+    window.addEventListener('online', onOnline)
+    return () => window.removeEventListener('online', onOnline)
+  }, [])
+
   return (
     <I18nProvider>
       <ProfileProvider>

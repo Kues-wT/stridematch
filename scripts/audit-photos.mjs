@@ -82,7 +82,7 @@ function dimensions(buf) {
 }
 
 const src = readFileSync(SHOES_TS, 'utf8')
-const catalog = [...src.matchAll(/id: '([^']+)',\n\s+name: '([^']+)',\n\s+brand: '([^']+)'/g)].map(
+const catalog = [...src.matchAll(/id: '([^']+)',\r?\n\s+name: '([^']+)',\r?\n\s+brand: '([^']+)'/g)].map(
   ([, id, name, brand]) => ({ id, label: `${brand} ${name}` }),
 )
 if (!catalog.length) {

@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ClipboardCopy, Download, Trash2 } from 'lucide-react'
-import { clearFeedback, feedbackTally, feedbackToCsv, loadFeedback, type FeedbackEntry } from '../lib/feedback'
+import { ClipboardCopy, CloudUpload, Download, Trash2 } from 'lucide-react'
+import {
+  clearFeedback,
+  feedbackTally,
+  feedbackToCsv,
+  loadFeedback,
+  syncFeedback,
+  type FeedbackEntry,
+} from '../lib/feedback'
 import { shoes } from '../data/shoes'
 import { useI18n } from '../context/I18nContext'
 import { useToast } from '../components/Toast'
@@ -13,7 +20,7 @@ const shoeName = (id: string) => {
 
 /**
  * Facilitator view for moderated tests — not linked from the main nav.
- * Everything here is read from this device's localStorage.
+ * Lists this device's answers; everyone's answers live in the Supabase feedback table.
  */
 export function Feedback() {
   const { t } = useI18n()
@@ -24,7 +31,16 @@ export function Feedback() {
   useEffect(() => {
     setEntries(loadFeedback())
     setHydrated(true)
+    void syncFeedback().then(() => setEntries(loadFeedback()))
   }, [])
+
+  const pending = entries.filter((e) => !e.synced).length
+
+  const retry = async () => {
+    const left = await syncFeedback()
+    setEntries(loadFeedback())
+    toast(left === 0 ? t('feedbackAllSent') : t('feedbackPending', { count: left }))
+  }
 
   const csv = useMemo(() => feedbackToCsv(entries), [entries])
   const tally = useMemo(() => feedbackTally(entries), [entries])
@@ -98,7 +114,15 @@ export function Feedback() {
                 <strong>{tally.off}</strong> {t('feedbackOff')}
               </span>
             </div>
+            <p className="muted">
+              {pending === 0 ? t('feedbackAllSent') : t('feedbackPending', { count: pending })}
+            </p>
             <div className="row-actions">
+              {pending > 0 && (
+                <button type="button" className="btn btn-primary" onClick={() => void retry()}>
+                  <CloudUpload size={16} /> {t('feedbackRetry')}
+                </button>
+              )}
               <button type="button" className="btn btn-secondary" onClick={() => void copy(csv)}>
                 <ClipboardCopy size={16} /> {t('feedbackCopyCsv')}
               </button>

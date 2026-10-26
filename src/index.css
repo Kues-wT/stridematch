@@ -2133,3 +2133,70 @@ img {
   color: var(--text);
   font-size: 0.95rem;
 }
+
+/* Foot scanner: AI opt-in, retake advice, measured size */
+.ai-toggle {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+  cursor: pointer;
+}
+
+.ai-toggle input {
+  margin-top: 0.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+.ai-toggle > span {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ai-toggle strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ai-toggle .muted {
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.scan-issues,
+.scan-notes {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.scan-issues {
+  color: var(--danger);
+}
+
+.scan-notes {
+  color: var(--text-muted);
+}
+
+.measured-size {
+  margin: 1rem 0;
+}
+
+.measured-size p {
+  margin: 0.3rem 0 0;
+}
+
+.results-size {
+  margin: 0.4rem 0 0;
+  color: var(--accent-text);
+  font-weight: 600;
+}

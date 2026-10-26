@@ -1,5 +1,6 @@
 import type { UserProfile } from './analysis'
 import { loadJson, removeKey, saveJson, storageKeys } from './storage'
+import { APP_VERSION, SUPABASE_URL, supabaseHeaders } from './remote'
 
 export type FeedbackRating = 'spot-on' | 'close' | 'off'
 
@@ -26,26 +27,82 @@ export interface FeedbackEntry {
   >
   /** Ranked shoes the tester was reacting to */
   top: { id: string; score: number }[]
+  /** True once the entry reached the online feedback table */
+  synced?: boolean
 }
 
 /**
- * Feedback never leaves the device — same promise as the rest of the app.
- * The facilitator exports it from /feedback after a session.
+ * Every answer is kept on this device (for moderated sessions and offline use)
+ * and also sent to the online feedback table. Failed sends are retried by
+ * syncFeedback() the next time the app opens or another answer is saved.
  */
 export function loadFeedback(): FeedbackEntry[] {
   const entries = loadJson<FeedbackEntry[]>(storageKeys.feedback, [])
   return Array.isArray(entries) ? entries : []
 }
 
-export function saveFeedback(entry: Omit<FeedbackEntry, 'id' | 'at'>): FeedbackEntry[] {
+export function saveFeedback(entry: Omit<FeedbackEntry, 'id' | 'at' | 'synced'>): FeedbackEntry[] {
   const full: FeedbackEntry = {
     ...entry,
     id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
     at: new Date().toISOString(),
+    synced: false,
   }
   const next = [full, ...loadFeedback()]
   saveJson(storageKeys.feedback, next)
+  void syncFeedback()
   return next
+}
+
+let syncing: Promise<number> | null = null
+
+/** Upload any unsent answers. Resolves to how many are still waiting. */
+export function syncFeedback(): Promise<number> {
+  if (!syncing) {
+    syncing = uploadPending().finally(() => {
+      syncing = null
+    })
+  }
+  return syncing
+}
+
+async function uploadPending(): Promise<number> {
+  const pending = loadFeedback().filter((e) => !e.synced)
+  if (pending.length === 0 || (typeof navigator !== 'undefined' && navigator.onLine === false)) {
+    return pending.length
+  }
+
+  const sent = new Set<string>()
+  for (const e of pending) {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/feedback`, {
+        method: 'POST',
+        headers: supabaseHeaders({ Prefer: 'return=minimal' }),
+        body: JSON.stringify({
+          id: e.id,
+          submitted_at: e.at,
+          rating: e.rating,
+          would_try: e.wouldTry.slice(0, 80),
+          note: e.note.slice(0, 1000),
+          lang: e.lang.slice(0, 8),
+          profile: e.profile,
+          top: e.top,
+          app_version: APP_VERSION,
+        }),
+      })
+      // 409 = this id is already stored (an earlier attempt got through)
+      if (res.ok || res.status === 409) sent.add(e.id)
+    } catch {
+      break // offline or blocked — try again later
+    }
+  }
+
+  if (sent.size) {
+    // Re-read so answers saved while we were uploading are not lost
+    const merged = loadFeedback().map((e) => (sent.has(e.id) ? { ...e, synced: true } : e))
+    saveJson(storageKeys.feedback, merged)
+  }
+  return pending.length - sent.size
 }
 
 export function clearFeedback() {
@@ -78,6 +135,7 @@ const CSV_COLUMNS = [
   'top3',
   'top3_score',
   'lang',
+  'sent_online',
 ]
 
 /** Spreadsheet-friendly export — one row per response. */
@@ -104,6 +162,7 @@ export function feedbackToCsv(entries: FeedbackEntry[]): string {
       e.top[2]?.id ?? '',
       e.top[2]?.score ?? '',
       e.lang,
+      e.synced ? 'yes' : 'no',
     ]
       .map(csvCell)
       .join(','),

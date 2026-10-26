@@ -73,7 +73,6 @@ Nike Pegasus 42 is priced from Nike Malaysia's own listing (RM 609).
 | Shoe | RM | Class | Drop / weight | Why it's here |
 |---|---|---|---|---|
 | ASICS GT-1000 14 | 429 | stability, balanced | 8 mm / 268 g | Cheapest real stability shoe — closes the budget gap |
-| Brooks Launch GTS 12 | 519 | stability, firm | 8 mm / 258 g | Light stability, cheaper than the Adrenaline |
 | adidas Supernova Solution 3 | 589 | stability, balanced | 8 mm / 280 g | PEBA stability with support rods |
 | Nike Pegasus 42 | 609 | neutral, balanced | 10 mm / 300 g | Current Pegasus, full-length Air Zoom |
 | HOKA Rincon 4 | 529 | neutral, balanced | 5 mm / 228 g | Light, low-cost tempo option |
@@ -83,7 +82,7 @@ Nike Pegasus 42 is priced from Nike Malaysia's own listing (RM 609).
 
 Three of these fill scoring gaps rather than just adding names: the GT-1000 14 gives an
 overpronating beginner on a budget a real answer (it now tops that persona at 88%, where the
-cheapest option used to be RM 589), and the Launch GTS 12 plus Supernova Solution 3 add
+cheapest option used to be RM 589), and the Supernova Solution 3 adds
 mid-priced support between it and the Adrenaline.
 
 ## Sub-RM300 tier (added 2026-08)
@@ -124,9 +123,8 @@ delete the entry and its photo.
 
 ## Known catalog gaps
 
-- **5 shoes have no photo** (Launch GTS 12, Supernova Solution 3, Triumph 23, 160X 6.0 Pro,
-  411v3) and **5 are still low-res**. They render the built-in silhouette or a soft image.
-  Run `npm run audit:photos` for the current list.
+- **3 photos are still low-res** (Propel v5, Adizero SL2, Solarboost 5 — older models the big
+  retailers no longer list). Every shoe has a photo. Run `npm run audit:photos` for the current list.
 - No stability shoe under RM 300 (see above).
 - GT-1000 15 and Xtep 160X 7.0 exist but were not verified for MY availability.
 - HOKA and Saucony entries have not had a spec-by-spec review.
@@ -149,3 +147,26 @@ shots, "Triumph 23" gives Triumph 20/22, "Solarboost 5" gives the 2018 Solarboos
 4. `npm run build` to confirm, then commit.
 
 Scoring and pages need no changes for normal catalog edits.
+
+## October 2026 pass (74 shoes)
+
+**Removed: Brooks Launch GTS 12.** No source shows Brooks ever released it — the Launch GTS line
+stops at the GTS 10, and the Launch 11/12 are neutral only. The entry's specs could not be traced
+to anything real, so it was deleted rather than kept as a guess. The ASICS GT-1000 14 (RM 429)
+still covers budget stability.
+
+**Added (4), every MYR price from a Malaysian listing:**
+
+| Shoe | RM | Class | Drop / weight | Price source |
+|---|---|---|---|---|
+| Saucony Endorphin Speed 5 | 399 | neutral, balanced, nylon plate | 8 mm / 238 g | Running Lab MY markdown (RM 799 list) |
+| HOKA Mach 6 | 525 | neutral, balanced | 5 mm listed (lab ~9.6 mm) / 232 g | Sports Direct MY (RM 749 list); Mach 7 is current |
+| Nike Vomero Plus | 759 | neutral, max | 10 mm / 292 g | Nike MY |
+| On Cloudsurfer Next | 829 | neutral, balanced | 6 mm / 265 g | On MY (on.com/en-my product data) |
+
+On is a new brand for the catalog. Considered but skipped for now because no Malaysian price
+could be confirmed: On Cloudmonster 2, Brooks Glycerin Max 2.
+
+**Photos added/replaced:** Triumph 23 and Supernova Solution 3 (brand/retailer CDNs, model name
+visible on the upper), 411v3 (M411LB3 listing), 160X 6.0 Pro (reseller listing image, Le Mans
+colourway), Glycerin GTS 23 and Rebel v5 upgraded to 1400 px, plus photos for all four new shoes.
