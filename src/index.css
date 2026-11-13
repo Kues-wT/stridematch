@@ -2308,3 +2308,16 @@ img {
 .reveal-cell {
   display: grid;
 }
+
+/* Back/Forward shows the restored page straight away */
+.page-transition.instant .page {
+  animation: none;
+}
+
+/* Phone "reduce motion" setting: no entrance animations */
+@media (prefers-reduced-motion: reduce) {
+  .page,
+  .toast {
+    animation: none;
+  }
+}

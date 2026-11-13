@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { blendOver, contrastRatio } from './contrast'
-import { PALETTE as T, SWIRL_MAX_OPACITY, SWIRL_PHONE_OPACITY, SWIRL_STROKES } from './palette'
+import { PALETTE as T, RIBBONS, SWIRL_PHONE_OPACITY, SWIRL_SIDES } from './palette'
 
 describe('palette contrast', () => {
   it.each([
@@ -20,17 +20,28 @@ describe('palette contrast', () => {
     expect(contrastRatio(fg, bg)).toBeGreaterThanOrEqual(min)
   })
 
-  it('muted text stays readable over the strongest phone swirl stroke', () => {
-    for (const stroke of SWIRL_STROKES) {
-      const under = blendOver(stroke, SWIRL_PHONE_OPACITY, T.bg)
-      expect(contrastRatio(T.muted, under)).toBeGreaterThanOrEqual(4.5)
-    }
-  })
+  // Every ribbon PageDecor draws, at desktop opacity and at the phone cap
+  const strokes = (['left', 'right'] as const).flatMap((side) =>
+    RIBBONS.map((r, i) => ({ colour: SWIRL_SIDES[side][i], opacity: r.opacity, dotted: !!r.dotted })),
+  )
+  const phone = (o: number) => Math.min(o, SWIRL_PHONE_OPACITY)
 
-  it('muted text stays readable over the strongest desktop swirl stroke', () => {
-    for (const stroke of SWIRL_STROKES) {
-      const under = blendOver(stroke, SWIRL_MAX_OPACITY, T.bg)
-      expect(contrastRatio(T.muted, under)).toBeGreaterThanOrEqual(4.5)
+  it.each(strokes.map((s) => [`${s.colour} @ ${s.opacity}`, s] as const))(
+    'muted text stays readable over ribbon %s (desktop and phone)',
+    (_name, s) => {
+      for (const o of [s.opacity, phone(s.opacity)]) {
+        expect(contrastRatio(T.muted, blendOver(s.colour, o, T.bg))).toBeGreaterThanOrEqual(4.5)
+      }
+    },
+  )
+
+  it('muted text stays readable where the two solid ribbons cross (desktop and phone)', () => {
+    for (const side of ['left', 'right'] as const) {
+      const solid = RIBBONS.map((r, i) => ({ ...r, colour: SWIRL_SIDES[side][i] })).filter((r) => !r.dotted)
+      for (const cap of [(o: number) => o, phone]) {
+        const under = solid.reduce((bg, r) => blendOver(r.colour, cap(r.opacity), bg), T.bg as string)
+        expect(contrastRatio(T.muted, under)).toBeGreaterThanOrEqual(4.5)
+      }
     }
   })
 

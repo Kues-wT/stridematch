@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, render } from '@testing-library/react'
 import { MemoryRouter, useNavigate } from 'react-router-dom'
 import { useScrollMemory } from './useScrollMemory'
+import { PAGE_EXIT_EVENT } from './PageTransition'
 
 let navigate: ReturnType<typeof useNavigate>
 const scrollTo = vi.fn()
@@ -39,6 +40,21 @@ describe('useScrollMemory', () => {
     setScroll(900)
     act(() => navigate('/results/x'))
     act(() => vi.runAllTimers())
+    expect(scrollTo).toHaveBeenLastCalledWith(0, 0)
+  })
+
+  it('waits for the old page to finish leaving before jumping to the top', () => {
+    render(
+      <MemoryRouter initialEntries={['/catalog']}>
+        <Probe />
+      </MemoryRouter>,
+    )
+    setScroll(900)
+    act(() => navigate('/results/x'))
+    act(() => vi.advanceTimersByTime(100))
+    expect(scrollTo).not.toHaveBeenCalled()
+    act(() => window.dispatchEvent(new Event(PAGE_EXIT_EVENT)))
+    act(() => vi.advanceTimersByTime(0))
     expect(scrollTo).toHaveBeenLastCalledWith(0, 0)
   })
 

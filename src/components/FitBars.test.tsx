@@ -4,6 +4,7 @@ import { cleanup, render } from '@testing-library/react'
 import { FitBars } from './FitBars'
 import { I18nProvider } from '../context/I18nContext'
 import { MotionProvider } from '../motion/MotionProvider'
+import { RevealInstantly } from '../motion/Reveal'
 import { mockMatchMedia, stubIntersectionObserver } from '../test/dom'
 
 afterEach(cleanup)
@@ -25,6 +26,22 @@ describe('FitBars', () => {
     mockMatchMedia({ '(prefers-reduced-motion: reduce)': true })
     stubIntersectionObserver()
     renderBars()
+    const fill = document.querySelector('.fit-bar-track i') as HTMLElement
+    expect(fill.style.width).toBe('88%')
+  })
+
+  it('shows bars already full when returning with Back', () => {
+    mockMatchMedia({ '(prefers-reduced-motion: reduce)': false })
+    stubIntersectionObserver()
+    render(
+      <I18nProvider>
+        <MotionProvider>
+          <RevealInstantly.Provider value>
+            <FitBars dims={dims} />
+          </RevealInstantly.Provider>
+        </MotionProvider>
+      </I18nProvider>,
+    )
     const fill = document.querySelector('.fit-bar-track i') as HTMLElement
     expect(fill.style.width).toBe('88%')
   })

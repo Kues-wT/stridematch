@@ -1,6 +1,8 @@
+import { useContext } from 'react'
 import { m } from 'motion/react'
 import type { FitDimension } from '../lib/fitBreakdown'
 import { useReduceMotion } from '../motion/useReduceMotion'
+import { RevealInstantly } from '../motion/Reveal'
 import { useI18n } from '../context/I18nContext'
 import type { TranslationKey } from '../i18n/translations'
 
@@ -16,7 +18,8 @@ const LABEL_KEY: Record<string, TranslationKey> = {
 /** Bar fill that grows to its score the first time it scrolls into view. */
 function Fill({ score }: { score: number }) {
   const reduce = useReduceMotion()
-  if (reduce) return <i style={{ width: `${score}%` }} />
+  const instant = useContext(RevealInstantly)
+  if (reduce || instant) return <i style={{ width: `${score}%` }} />
   return (
     <m.i
       initial={{ width: '0%' }}

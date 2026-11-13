@@ -1,9 +1,12 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useLocation, useNavigationType } from 'react-router-dom'
+import { PAGE_EXIT_EVENT } from './PageTransition'
 
 const STORE_KEY = 'kasutku.scroll.v1'
 const RETRIES = 12
 const RETRY_MS = 50
+/** If no exit animation runs (reduce motion, same page), go to the top anyway after this. */
+const EXIT_FALLBACK_MS = 400
 
 function loadSaved(): Record<string, number> {
   try {
@@ -43,12 +46,28 @@ export function useScrollMemory() {
 
   useLayoutEffect(() => {
     currentKey.current = location.key
-    const target = navType === 'POP' ? (saved.current[location.key] ?? 0) : 0
-    let tries = 0
     let timer: ReturnType<typeof setTimeout>
+
+    if (navType !== 'POP') {
+      // New page: wait for the old one to finish fading out, so it doesn't jump to the top mid-fade
+      const toTop = () => {
+        clearTimeout(timer)
+        window.removeEventListener(PAGE_EXIT_EVENT, toTop)
+        timer = setTimeout(() => window.scrollTo(0, 0), 0)
+      }
+      window.addEventListener(PAGE_EXIT_EVENT, toTop)
+      timer = setTimeout(toTop, EXIT_FALLBACK_MS)
+      return () => {
+        clearTimeout(timer)
+        window.removeEventListener(PAGE_EXIT_EVENT, toTop)
+      }
+    }
+
+    const target = saved.current[location.key] ?? 0
+    let tries = 0
     const apply = () => {
       const tallEnough = document.documentElement.scrollHeight - window.innerHeight >= target
-      if (tallEnough || tries >= RETRIES) {
+      if (target === 0 || tallEnough || tries >= RETRIES) {
         window.scrollTo(0, target)
         return
       }
