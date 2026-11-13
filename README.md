@@ -89,3 +89,16 @@ measurements still work and the app says the AI check isn't switched on.
 - Blurry, cut-off or paper-less photos are rejected with retake advice instead of guessed.
 
 `npm test` runs the scanner tests against generated footprints and tilted A4 photos with known answers.
+
+## Design
+
+Light "Tropical trail" theme: soft mint background, emerald (`#047857`) primary, mango orange
+(`#EA580C`) for scores. Colour tokens live in `src/index.css` (`:root`) and are mirrored in
+`src/theme/palette.ts`, where `src/theme/contrast.test.ts` checks every text/background pair
+(≥ 4.5 : 1), button edges and chart fills (≥ 3 : 1), and text over the side swirls.
+
+Motion (Framer Motion via the `motion` package, `LazyMotion` + `m` components) is in `src/motion/`:
+`PageDecor` (drifting glows + side ribbons), `Reveal`/`RevealGroup` (glide-in on scroll),
+`PageTransition`, `useScrollMemory` (Back/Forward returns to where you were) and `useScrolled`
+(header shadow). With the phone's "reduce motion" setting on, nothing moves and all content
+shows straight away.
