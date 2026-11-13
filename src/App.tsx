@@ -4,6 +4,7 @@ import { syncFeedback } from './lib/feedback'
 import { ProfileProvider } from './context/ProfileContext'
 import { I18nProvider } from './context/I18nContext'
 import { ToastProvider } from './components/Toast'
+import { MotionProvider } from './motion/MotionProvider'
 import { Layout } from './components/Layout'
 import { Home } from './pages/Home'
 import { Analyze } from './pages/Analyze'
@@ -26,28 +27,30 @@ export default function App() {
   }, [])
 
   return (
-    <I18nProvider>
-      <ProfileProvider>
-        <ToastProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="analyze" element={<Analyze />} />
-                <Route path="results" element={<Results />} />
-                <Route path="results/:id" element={<ShoeDetail />} />
-                <Route path="catalog" element={<Catalog />} />
-                <Route path="shortlist" element={<Shortlist />} />
-                <Route path="compare" element={<Compare />} />
-                <Route path="stores" element={<Stores />} />
-                <Route path="how-it-works" element={<HowItWorks />} />
-                <Route path="feedback" element={<Feedback />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </ToastProvider>
-      </ProfileProvider>
-    </I18nProvider>
+    <MotionProvider>
+      <I18nProvider>
+        <ProfileProvider>
+          <ToastProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="analyze" element={<Analyze />} />
+                  <Route path="results" element={<Results />} />
+                  <Route path="results/:id" element={<ShoeDetail />} />
+                  <Route path="catalog" element={<Catalog />} />
+                  <Route path="shortlist" element={<Shortlist />} />
+                  <Route path="compare" element={<Compare />} />
+                  <Route path="stores" element={<Stores />} />
+                  <Route path="how-it-works" element={<HowItWorks />} />
+                  <Route path="feedback" element={<Feedback />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </ToastProvider>
+        </ProfileProvider>
+      </I18nProvider>
+    </MotionProvider>
   )
 }
