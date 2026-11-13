@@ -1,7 +1,14 @@
 import type { ReactNode } from 'react'
-import { MotionConfig } from 'motion/react'
+import { LazyMotion, MotionConfig, domAnimation } from 'motion/react'
 
-/** App-wide motion settings: follow the phone's "reduce motion" setting. */
+/**
+ * App-wide motion settings: follow the phone's "reduce motion" setting, and load only the
+ * animation features we use (LazyMotion + `m` components) to keep the phone bundle small.
+ */
 export function MotionProvider({ children }: { children: ReactNode }) {
-  return <MotionConfig reducedMotion="user">{children}</MotionConfig>
+  return (
+    <LazyMotion features={domAnimation} strict>
+      <MotionConfig reducedMotion="user">{children}</MotionConfig>
+    </LazyMotion>
+  )
 }

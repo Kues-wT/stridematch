@@ -2303,3 +2303,8 @@ img {
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 8px 24px rgba(18, 38, 28, 0.1);
 }
+
+/* Reveal wrapper around grid cards: let the card fill the cell */
+.reveal-cell {
+  display: grid;
+}

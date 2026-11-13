@@ -2,6 +2,7 @@ import { ExternalLink, MapPin, Store } from 'lucide-react'
 import { storesMy } from '../data/storesMy'
 import { useI18n } from '../context/I18nContext'
 import type { TranslationKey } from '../i18n/translations'
+import { Reveal, RevealGroup } from '../motion/Reveal'
 
 export function Stores() {
   const { lang, t } = useI18n()
@@ -23,9 +24,9 @@ export function Stores() {
         <p className="lede">{t('storesLede')}</p>
       </header>
 
-      <div className="store-grid">
+      <RevealGroup className="store-grid">
         {storesMy.map((s) => (
-          <article key={s.id} className="store-card panel">
+          <Reveal as="article" key={s.id} className="store-card panel">
             <div className="store-card-top">
               <span className="store-type">{t(typeKey(s.type))}</span>
               <span className="muted">
@@ -44,9 +45,9 @@ export function Stores() {
             >
               {t('openInMaps')} <ExternalLink size={14} />
             </a>
-          </article>
+          </Reveal>
         ))}
-      </div>
+      </RevealGroup>
 
       <div className="panel tip-panel">
         <h2>{t('tryOnTips')}</h2>

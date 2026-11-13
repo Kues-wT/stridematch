@@ -9,6 +9,7 @@ import { buildShareUrl, decodeShare, profileToShare } from '../lib/share'
 import { useToast } from '../components/Toast'
 import { useI18n } from '../context/I18nContext'
 import type { TranslationKey } from '../i18n/translations'
+import { Reveal, RevealGroup } from '../motion/Reveal'
 
 export function Results() {
   const navigate = useNavigate()
@@ -148,11 +149,13 @@ export function Results() {
         </div>
       </header>
 
-      <div className="results-grid">
+      <RevealGroup className="results-grid">
         {matches.map((m, i) => (
-          <ShoeCard key={m.shoe.id} match={m} rank={i + 1} showFitBars />
+          <Reveal key={m.shoe.id} className="reveal-cell">
+            <ShoeCard match={m} rank={i + 1} showFitBars />
+          </Reveal>
         ))}
-      </div>
+      </RevealGroup>
 
       {matches.length > 0 && <FeedbackPrompt matches={matches} profile={user} />}
     </div>

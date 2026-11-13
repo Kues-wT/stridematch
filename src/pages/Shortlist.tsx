@@ -8,6 +8,7 @@ import { ShoeCard } from '../components/ShoeCard'
 import { ShoeImage } from '../components/ShoeImage'
 import { useToast } from '../components/Toast'
 import { useI18n } from '../context/I18nContext'
+import { Reveal, RevealGroup } from '../motion/Reveal'
 
 export function Shortlist() {
   const { shortlist, toggleShortlist, toggleCompare, isComparing, asUserProfile } = useProfile()
@@ -63,15 +64,17 @@ export function Shortlist() {
       </header>
 
       {matches ? (
-        <div className="results-grid">
+        <RevealGroup className="results-grid">
           {matches.map((m, i) => (
-            <ShoeCard key={m.shoe.id} match={m} rank={i + 1} showFitBars />
+            <Reveal key={m.shoe.id} className="reveal-cell">
+              <ShoeCard match={m} rank={i + 1} showFitBars />
+            </Reveal>
           ))}
-        </div>
+        </RevealGroup>
       ) : (
         <div className="catalog-grid">
           {savedShoes.map((shoe) => (
-            <article key={shoe.id} className="catalog-card">
+            <Reveal as="article" key={shoe.id} className="catalog-card">
               <div className="catalog-visual">
                 <ShoeImage
                   src={shoe.image}
@@ -118,7 +121,7 @@ export function Shortlist() {
                   </div>
                 </div>
               </div>
-            </article>
+            </Reveal>
           ))}
         </div>
       )}

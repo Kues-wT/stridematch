@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { motion, useScroll, useTransform, type MotionValue } from 'motion/react'
+import { m, useScroll, useTransform, type MotionValue } from 'motion/react'
 import { useReduceMotion } from './useReduceMotion'
 import { SWIRL_PHONE_OPACITY } from '../theme/palette'
 
@@ -42,18 +42,18 @@ function Swirl({ side, motionValues }: { side: 'left' | 'right'; motionValues?: 
     }
     if (r.dotted) return <path key={i} {...common} strokeDasharray="2 12" />
     if (!motionValues) return <path key={i} {...common} />
-    return <motion.path key={i} {...common} style={{ ...common.style, pathLength: motionValues.drawn }} />
+    return <m.path key={i} {...common} style={{ ...common.style, pathLength: motionValues.drawn }} />
   })
 
   return (
     <svg className={`swirl ${side}`} viewBox="0 0 260 900" preserveAspectRatio="none">
       {motionValues ? (
-        <motion.g
+        <m.g
           className="swirl-group"
           style={{ y: motionValues.y, rotate: motionValues.rotate }}
         >
           {paths}
-        </motion.g>
+        </m.g>
       ) : (
         <g className="swirl-group">{paths}</g>
       )}
@@ -74,8 +74,8 @@ function MovingDecor() {
 
   return (
     <>
-      <motion.div className="glow glow-mint" style={{ x: g1x, y: g1y }} />
-      <motion.div className="glow glow-mango" style={{ x: g2x, y: g2y }} />
+      <m.div className="glow glow-mint" style={{ x: g1x, y: g1y }} />
+      <m.div className="glow glow-mango" style={{ x: g2x, y: g2y }} />
       <Swirl side="left" motionValues={{ drawn, y: lift, rotate: turnLeft }} />
       <Swirl side="right" motionValues={{ drawn, y: lift, rotate: turnRight }} />
     </>
