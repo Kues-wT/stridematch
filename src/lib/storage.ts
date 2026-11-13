@@ -1,3 +1,4 @@
+// Keys keep the original 'stridematch.' prefix so testers keep their saved data after the KasutKu rename
 const PROFILE_KEY = 'stridematch.profile.v1'
 const SHORTLIST_KEY = 'stridematch.shortlist.v1'
 const COMPARE_KEY = 'stridematch.compare.v1'

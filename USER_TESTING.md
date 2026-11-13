@@ -1,4 +1,4 @@
-# Running a StrideMatch user test (KK)
+# Running a KasutKu user test (KK)
 
 Short runbook for the first rounds of moderated testing. Target: 3–5 people,
 15–20 minutes each. No account, no upload, nothing leaves the tester's device.
@@ -6,7 +6,7 @@ Short runbook for the first rounds of moderated testing. Target: 3–5 people,
 ## Before the session
 
 1. `npm run audit:photos` — make sure nothing is missing or low-res.
-2. `npm run build` locally, push, and confirm https://stridematch.vercel.app is current.
+2. `npm run build` locally, push, and confirm your Vercel production URL is current.
 3. Decide the device. Using **one phone you own** keeps every response in one
    localStorage bucket and makes the export easy. If testers use their own phones,
    you have to export from each phone separately.
@@ -45,7 +45,7 @@ so testers don't wander into other people's answers).
 You get a tally, every response in full, and:
 
 - **Copy CSV** — paste straight into Sheets / Excel
-- **Download CSV** — `stridematch-feedback-YYYY-MM-DD.csv`
+- **Download CSV** — `kasutku-feedback-YYYY-MM-DD.csv`
 - **Copy JSON** — full records including the profile behind each match
 - **Clear all** — wipe the device before handing the phone back
 

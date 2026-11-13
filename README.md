@@ -1,4 +1,4 @@
-# StrideMatch
+# KasutKu
 
 Find suitable running shoes with **multi-photo foot analysis**, a gait & goals quiz, a **real-model catalog** (MYR estimates), shortlist, compare, Bahasa Melayu toggle, and Malaysia store tips.
 
@@ -60,7 +60,7 @@ Not medical advice. Photo analysis is an on-device heuristic. Shoe specs and MYR
 
 ## Online services (free tier)
 
-StrideMatch uses one Supabase project (`stridematch`, Singapore region) for two things. The
+KasutKu uses one Supabase project (`stridematch`, Singapore region) for two things. The
 publishable key in `src/lib/remote.ts` is meant to be public.
 
 **Tester feedback.** Every answer to the results-page prompt is saved on the device and sent to

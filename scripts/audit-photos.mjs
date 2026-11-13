@@ -125,7 +125,7 @@ const orphans = [...byId.entries()]
 const kb = (n) => `${Math.round(n / 1024)} KB`
 const px = (d) => (d ? `${d.width}x${d.height}` : 'unreadable')
 
-console.log(`\nStrideMatch photo audit — ${catalog.length} shoes, ${files.length} images\n`)
+console.log(`\nKasutKu photo audit — ${catalog.length} shoes, ${files.length} images\n`)
 
 if (missing.length) {
   console.log(`MISSING (${missing.length}) — add public/shoes/{id}.jpg:`)

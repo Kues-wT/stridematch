@@ -66,9 +66,9 @@ export const storesMy: StoreTip[] = [
     name: 'Online (Shopee, Lazada, brand sites)',
     type: 'online',
     notes:
-      'Handy once you know your size. Prefer sellers with easy returns. Search the exact model name from StrideMatch, then check colourway and size chart.',
+      'Handy once you know your size. Prefer sellers with easy returns. Search the exact model name from KasutKu, then check colourway and size chart.',
     notesMs:
-      'Sesuai jika anda sudah tahu saiz. Pilih penjual dengan pulangan mudah. Cari nama model tepat dari StrideMatch, lalu semak warna dan carta saiz.',
+      'Sesuai jika anda sudah tahu saiz. Pilih penjual dengan pulangan mudah. Cari nama model tepat dari KasutKu, lalu semak warna dan carta saiz.',
     mapQuery: 'running shoes Shopee Lazada Malaysia',
   },
 ]

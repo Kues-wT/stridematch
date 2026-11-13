@@ -1,7 +1,7 @@
 export type Lang = 'en' | 'ms'
 
 const en = {
-  brand: 'StrideMatch',
+  brand: 'KasutKu',
   navHome: 'Home',
   navAnalyze: 'Analyze',
   navCatalog: 'Catalog',
@@ -182,7 +182,7 @@ const en = {
   issueSideOffPaper: 'Your foot goes over the side of the paper. Centre it on the sheet.',
   aiToggleTitle: 'Double-check my photos with AI (optional)',
   aiToggleBody:
-    'Sends a smaller copy of each foot photo to Google Gemini (free tier) to catch bad photos and give a second opinion. StrideMatch doesn’t keep it, but Google may use free-tier data to improve its products.',
+    'Sends a smaller copy of each foot photo to Google Gemini (free tier) to catch bad photos and give a second opinion. KasutKu doesn’t keep it, but Google may use free-tier data to improve its products.',
   aiChecking: 'AI double-check…',
   aiAgree: 'AI check agrees with the measurement.',
   aiDisagree: 'AI second opinion: {{arch}}. The readings differ — please confirm on the next screen.',
@@ -328,7 +328,7 @@ const en = {
   labelPriceBand: 'Price band',
   // how it works
   howEyebrow: 'Transparent by design',
-  howTitle: 'How StrideMatch works',
+  howTitle: 'How KasutKu works',
   howLede:
     'We combine multi-photo foot analysis with a short running profile quiz, then score real shoe models on fit, support, cushion, surface, and budget.',
   howTopTitle: 'Wet footprint + A4 photo',
@@ -355,7 +355,7 @@ const en = {
     'Catalog includes ASICS, Brooks, HOKA, Saucony, Nike, New Balance, adidas, Altra, On — with MYR prices and research links.',
   howPrivacyTitle: 'Privacy & safety',
   howPrivacyBody:
-    'Measurements run on your device. Photos only leave it if you switch on the optional AI check, which sends a smaller copy to Google Gemini once and is never stored by StrideMatch. Use StrideMatch to shortlist models, then try them on in a store when you can — especially for trail routes around KK.',
+    'Measurements run on your device. Photos only leave it if you switch on the optional AI check, which sends a smaller copy to Google Gemini once and is never stored by KasutKu. Use KasutKu to shortlist models, then try them on in a store when you can — especially for trail routes around KK.',
   // stores
   openInMaps: 'Open in Maps',
   tryOnTips: 'In-store try-on tips',
@@ -390,7 +390,7 @@ const en = {
   feedbackSubmit: 'Send feedback',
   feedbackPickRating: 'Pick one option first.',
   feedbackThanksTitle: 'Thanks — noted.',
-  feedbackThanksBody: 'Sent anonymously. If you are offline it uploads automatically next time you open StrideMatch.',
+  feedbackThanksBody: 'Sent anonymously. If you are offline it uploads automatically next time you open KasutKu.',
   feedbackAgain: 'Change my answer',
   feedbackAdminEyebrow: 'Facilitator view',
   feedbackAdminTitle: 'Tester feedback',
@@ -415,7 +415,7 @@ const en = {
 type Dict = { [K in keyof typeof en]: string }
 
 const ms: Dict = {
-  brand: 'StrideMatch',
+  brand: 'KasutKu',
   navHome: 'Laman utama',
   navAnalyze: 'Analisis',
   navCatalog: 'Katalog',
@@ -593,7 +593,7 @@ const ms: Dict = {
   issueSideOffPaper: 'Kaki anda terkeluar dari tepi kertas. Letakkan di tengah kertas.',
   aiToggleTitle: 'Semak semula foto saya dengan AI (pilihan)',
   aiToggleBody:
-    'Menghantar salinan kecil setiap foto kaki ke Google Gemini (peringkat percuma) untuk mengesan foto kurang baik dan memberi pendapat kedua. StrideMatch tidak menyimpannya, tetapi Google mungkin menggunakan data peringkat percuma untuk menambah baik produknya.',
+    'Menghantar salinan kecil setiap foto kaki ke Google Gemini (peringkat percuma) untuk mengesan foto kurang baik dan memberi pendapat kedua. KasutKu tidak menyimpannya, tetapi Google mungkin menggunakan data peringkat percuma untuk menambah baik produknya.',
   aiChecking: 'Semakan AI…',
   aiAgree: 'Semakan AI bersetuju dengan ukuran.',
   aiDisagree: 'Pendapat kedua AI: {{arch}}. Bacaan berbeza — sila sahkan di skrin seterusnya.',
@@ -733,7 +733,7 @@ const ms: Dict = {
   labelSurfaces: 'Permukaan',
   labelPriceBand: 'Julat harga',
   howEyebrow: 'Reka bentuk telus',
-  howTitle: 'Bagaimana StrideMatch berfungsi',
+  howTitle: 'Bagaimana KasutKu berfungsi',
   howLede:
     'Kami gabungkan analisis kaki berbilang foto dengan kuiz profil lari ringkas, lalu skor model kasut sebenar berdasarkan padanan, sokongan, kusyen, permukaan, dan bajet.',
   howTopTitle: 'Cap kaki basah + foto A4',
@@ -760,7 +760,7 @@ const ms: Dict = {
     'Katalog merangkumi ASICS, Brooks, HOKA, Saucony, Nike, New Balance, adidas, Altra, On — dengan harga MYR dan pautan selidik.',
   howPrivacyTitle: 'Privasi & keselamatan',
   howPrivacyBody:
-    'Ukuran dijalankan pada peranti anda. Foto hanya keluar jika anda hidupkan semakan AI pilihan, yang menghantar salinan kecil ke Google Gemini sekali dan tidak disimpan oleh StrideMatch. Gunakan StrideMatch untuk senaraikan model, kemudian cuba di kedai bila boleh — terutamanya untuk laluan trail sekitar KK.',
+    'Ukuran dijalankan pada peranti anda. Foto hanya keluar jika anda hidupkan semakan AI pilihan, yang menghantar salinan kecil ke Google Gemini sekali dan tidak disimpan oleh KasutKu. Gunakan KasutKu untuk senaraikan model, kemudian cuba di kedai bila boleh — terutamanya untuk laluan trail sekitar KK.',
   openInMaps: 'Buka dalam Peta',
   tryOnTips: 'Tips cuba kasut di kedai',
   tryTip1: 'Cuba pada petang — kaki sedikit bengkak seperti selepas berlari.',
@@ -793,7 +793,7 @@ const ms: Dict = {
   feedbackPickRating: 'Pilih satu pilihan dahulu.',
   feedbackThanksTitle: 'Terima kasih — sudah direkod.',
   feedbackThanksBody:
-    'Dihantar tanpa nama. Jika anda di luar talian, ia dimuat naik secara automatik apabila anda membuka StrideMatch lagi.',
+    'Dihantar tanpa nama. Jika anda di luar talian, ia dimuat naik secara automatik apabila anda membuka KasutKu lagi.',
   feedbackAgain: 'Tukar jawapan saya',
   feedbackAdminEyebrow: 'Paparan fasilitator',
   feedbackAdminTitle: 'Maklum balas penguji',

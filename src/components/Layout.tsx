@@ -72,7 +72,7 @@ export function Layout() {
             <Footprints size={20} strokeWidth={2.25} />
           </span>
           <span className="brand-text">
-            Stride<span>Match</span>
+            Kasut<span>Ku</span>
           </span>
         </Link>
 
