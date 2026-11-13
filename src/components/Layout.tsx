@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Activity, Footprints, Heart, Menu, X } from 'lucide-react'
 import { CompareBar } from './CompareBar'
 import { useProfile } from '../context/ProfileContext'
 import { PageDecor } from '../motion/PageDecor'
+import { PageTransition } from '../motion/PageTransition'
+import { useScrollMemory } from '../motion/useScrollMemory'
 import { useScrolled } from '../motion/useScrolled'
 import { useI18n } from '../context/I18nContext'
 
@@ -13,6 +15,7 @@ export function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
   const scrolled = useScrolled()
+  useScrollMemory()
 
   // Close drawer on route change
   useEffect(() => {
@@ -166,7 +169,7 @@ export function Layout() {
       </nav>
 
       <main className="main">
-        <Outlet />
+        <PageTransition />
       </main>
       <CompareBar />
       <footer className="footer">
