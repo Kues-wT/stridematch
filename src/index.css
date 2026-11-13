@@ -1,22 +1,29 @@
 :root {
-  color-scheme: dark;
-  --bg: #070b14;
-  --bg-elevated: #0f1628;
-  --bg-panel: #121a2e;
-  --bg-soft: #182238;
-  --border: rgba(148, 163, 184, 0.16);
-  --border-strong: rgba(163, 230, 53, 0.45);
-  --text: #f1f5f9;
-  --text-muted: #94a3b8;
-  --accent: #a3e635;
-  --accent-dim: rgba(163, 230, 53, 0.14);
-  --accent-text: #d9f99d;
-  --danger: #fb7185;
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  /* Tropical trail — values mirrored in src/theme/palette.ts (checked by contrast.test.ts) */
+  color-scheme: light;
+  --bg: #f3fbf6;
+  --bg-elevated: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-soft: #e8f5ee;
+  --border: rgba(18, 38, 28, 0.12);
+  --border-strong: rgba(4, 120, 87, 0.45);
+  --text: #12261c;
+  --text-muted: #3f5248;
+  --accent: #047857;
+  --accent-dim: #d1fae5;
+  --accent-text: #065f46;
+  --accent-2: #ea580c;
+  --accent-2-soft: #fed7aa;
+  --accent-2-ink: #7c2d12;
+  --accent-2-border: #c2410c;
+  --danger: #b91c1c;
+  --nav-text: #2d3734;
+  --bar-track: #b7c9be;
+  --shadow: 0 18px 50px rgba(18, 38, 28, 0.1);
   --radius: 18px;
   --radius-sm: 12px;
   --font: 'DM Sans', system-ui, sans-serif;
-  --display: 'Space Grotesk', 'DM Sans', system-ui, sans-serif;
+  --display: 'DM Sans', system-ui, sans-serif;
   --max: 1120px;
 }
 
@@ -35,10 +42,7 @@ body,
 body {
   margin: 0;
   font-family: var(--font);
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(163, 230, 53, 0.12), transparent 55%),
-    radial-gradient(900px 500px at 100% 0%, rgba(56, 189, 248, 0.1), transparent 50%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
@@ -58,6 +62,7 @@ h1,
 h2,
 h3 {
   font-family: var(--display);
+  font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
