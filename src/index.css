@@ -2208,3 +2208,98 @@ img {
   color: var(--accent-text);
   font-weight: 600;
 }
+
+/* Page decoration: drifting glows + side ribbons (src/motion/PageDecor.tsx) */
+.page-decor {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.main,
+.footer,
+.compare-bar {
+  position: relative;
+  z-index: 1;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.glow-mint {
+  width: 420px;
+  height: 420px;
+  top: -80px;
+  left: -120px;
+  background: #6ee7b7;
+}
+
+.glow-mango {
+  width: 360px;
+  height: 360px;
+  top: 40%;
+  right: -140px;
+  background: #fdba74;
+}
+
+.swirl {
+  position: absolute;
+  top: 0;
+  width: 260px;
+  height: 100vh;
+  overflow: visible;
+}
+
+.swirl.left {
+  left: -70px;
+}
+
+.swirl.right {
+  right: -70px;
+  transform: scaleX(-1);
+}
+
+.swirl path {
+  opacity: var(--ribbon-opacity);
+}
+
+.swirl-group {
+  transform-box: view-box;
+  transform-origin: 130px 450px;
+  will-change: transform;
+}
+
+@media (max-width: 719px) {
+  .swirl {
+    width: 150px;
+  }
+
+  .swirl.left {
+    left: -60px;
+  }
+
+  .swirl.right {
+    right: -60px;
+  }
+
+  .swirl path {
+    opacity: min(var(--ribbon-opacity), var(--swirl-phone-opacity));
+  }
+}
+
+/* Header lifts off the page once you scroll */
+.topbar {
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.topbar.scrolled {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 24px rgba(18, 38, 28, 0.1);
+}

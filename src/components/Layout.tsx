@@ -3,6 +3,8 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Activity, Footprints, Heart, Menu, X } from 'lucide-react'
 import { CompareBar } from './CompareBar'
 import { useProfile } from '../context/ProfileContext'
+import { PageDecor } from '../motion/PageDecor'
+import { useScrolled } from '../motion/useScrolled'
 import { useI18n } from '../context/I18nContext'
 
 export function Layout() {
@@ -10,6 +12,7 @@ export function Layout() {
   const { lang, setLang, t } = useI18n()
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
+  const scrolled = useScrolled()
 
   // Close drawer on route change
   useEffect(() => {
@@ -55,7 +58,8 @@ export function Layout() {
 
   return (
     <div className="app-shell">
-      <header className="topbar">
+      <PageDecor />
+      <header className={`topbar${scrolled ? ' scrolled' : ''}`}>
         <button
           type="button"
           className="icon-btn menu-toggle"

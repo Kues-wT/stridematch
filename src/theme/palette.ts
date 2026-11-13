@@ -23,3 +23,5 @@ export const PALETTE = {
 /** Side-swirl stroke colours (mint, mango) and the opacity they drop to on phones. */
 export const SWIRL_STROKES = ['#34D399', '#FDBA74'] as const
 export const SWIRL_PHONE_OPACITY = 0.3
+/** Strongest ribbon opacity on wide screens (the mockup's medium ribbon). */
+export const SWIRL_MAX_OPACITY = 0.7

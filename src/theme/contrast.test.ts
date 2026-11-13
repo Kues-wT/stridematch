@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { blendOver, contrastRatio } from './contrast'
-import { PALETTE as T, SWIRL_PHONE_OPACITY, SWIRL_STROKES } from './palette'
+import { PALETTE as T, SWIRL_MAX_OPACITY, SWIRL_PHONE_OPACITY, SWIRL_STROKES } from './palette'
 
 describe('palette contrast', () => {
   it.each([
@@ -23,6 +23,13 @@ describe('palette contrast', () => {
   it('muted text stays readable over the strongest phone swirl stroke', () => {
     for (const stroke of SWIRL_STROKES) {
       const under = blendOver(stroke, SWIRL_PHONE_OPACITY, T.bg)
+      expect(contrastRatio(T.muted, under)).toBeGreaterThanOrEqual(4.5)
+    }
+  })
+
+  it('muted text stays readable over the strongest desktop swirl stroke', () => {
+    for (const stroke of SWIRL_STROKES) {
+      const under = blendOver(stroke, SWIRL_MAX_OPACITY, T.bg)
       expect(contrastRatio(T.muted, under)).toBeGreaterThanOrEqual(4.5)
     }
   })
