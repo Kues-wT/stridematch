@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Camera, BrainCircuit, ListChecks, Shield, Footprints } from 'lucide-react'
 import { useI18n } from '../context/I18nContext'
+import { Reveal } from '../motion/Reveal'
 
 export function HowItWorks() {
   const { t } = useI18n()
@@ -14,39 +15,39 @@ export function HowItWorks() {
       </header>
 
       <div className="info-stack">
-        <section className="info-card">
+        <Reveal as="section" className="info-card">
           <Camera size={22} className="info-icon" />
           <div>
             <h2>{t('howTopTitle')}</h2>
             <p>{t('howTopBody')}</p>
           </div>
-        </section>
+        </Reveal>
 
-        <section className="info-card">
+        <Reveal as="section" className="info-card">
           <Footprints size={22} className="info-icon" />
           <div>
             <h2>{t('howSideTitle')}</h2>
             <p>{t('howSideBody')}</p>
           </div>
-        </section>
+        </Reveal>
 
-        <section className="info-card">
+        <Reveal as="section" className="info-card">
           <Footprints size={22} className="info-icon" />
           <div>
             <h2>{t('howWearTitle')}</h2>
             <p>{t('howWearBody')}</p>
           </div>
-        </section>
+        </Reveal>
 
-        <section className="info-card">
+        <Reveal as="section" className="info-card">
           <ListChecks size={22} className="info-icon" />
           <div>
             <h2>{t('howQuizTitle')}</h2>
             <p>{t('howQuizBody')}</p>
           </div>
-        </section>
+        </Reveal>
 
-        <section className="info-card">
+        <Reveal as="section" className="info-card">
           <BrainCircuit size={22} className="info-icon" />
           <div>
             <h2>{t('howScoreTitle')}</h2>
@@ -61,15 +62,15 @@ export function HowItWorks() {
             </ul>
             <p>{t('howScoreOutro')}</p>
           </div>
-        </section>
+        </Reveal>
 
-        <section className="info-card">
+        <Reveal as="section" className="info-card">
           <Shield size={22} className="info-icon" />
           <div>
             <h2>{t('howPrivacyTitle')}</h2>
             <p>{t('howPrivacyBody')}</p>
           </div>
-        </section>
+        </Reveal>
       </div>
 
       <div className="page-actions">

@@ -12,7 +12,11 @@ export interface ShoeMatch {
   reasons: MatchReason[]
 }
 
-/** Exact matches score high but rarely a perfect 1.0 — keeps rankings believable. */
+/**
+ * Rows = the runner's arch reading, columns = the arch profile a shoe is built for.
+ * Flat / low arches pair with structured shoes; high arches pair with soft neutral
+ * cushioning. Exact matches score high but rarely a perfect 1.0 — keeps rankings believable.
+ */
 const ARCH_SUPPORT_MAP = {
   low: { low: 0.94, medium: 0.58, high: 0.18 },
   normal: { low: 0.55, medium: 0.93, high: 0.55 },
@@ -55,12 +59,12 @@ function scoreShoe(shoe: Shoe, profile: UserProfile): ShoeMatch {
   if (archScore >= 0.88) {
     reasons.push({
       label: 'Arch support',
-      detail: `Built for ${shoe.archSupport} arch support — aligns well with your ${profile.arch} arch profile.`,
+      detail: `Built for ${archWord(shoe.archSupport)} arches — a strong match for your ${profile.arch} arch reading.`,
     })
   } else if (archScore >= 0.5) {
     reasons.push({
       label: 'Arch support',
-      detail: `Offers ${shoe.archSupport} support — a workable option for ${profile.arch} arches.`,
+      detail: `Aimed at ${archWord(shoe.archSupport)} arches — still a workable option for ${profile.arch} arches.`,
     })
   }
 
@@ -154,6 +158,11 @@ function scoreShoe(shoe: Shoe, profile: UserProfile): ShoeMatch {
   const raw = (total / weightSum) * 100
   const score = Math.round(Math.min(96, raw * 0.97))
   return { shoe, score, reasons: reasons.slice(0, 4) }
+}
+
+/** Shoe arch categories are low | medium | high; runners read 'normal', not 'medium'. */
+function archWord(arch: Shoe['archSupport']): string {
+  return arch === 'medium' ? 'normal' : arch
 }
 
 function surfaceFit(shoe: Shoe, surface: UserProfile['surface']): number {

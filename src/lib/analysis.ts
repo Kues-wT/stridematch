@@ -13,8 +13,10 @@ export interface FootAnalysisResult {
   brightness: number
   notes: string[]
   previewDataUrl?: string
-  mode: 'top-down' | 'side' | 'combined'
+  mode: 'top-down' | 'footprint' | 'side' | 'combined'
   sideArchRatio?: number
+  /** Chippaux-Smirak index from a wet footprint (0–1) */
+  csi?: number
 }
 
 export interface WearAnalysisResult {
@@ -39,6 +41,15 @@ export interface UserProfile {
   budget: Budget
   photoAnalysis?: FootAnalysisResult
   wearAnalysis?: WearAnalysisResult
+  footMeasure?: FootMeasure
+}
+
+/** Real measurements from the foot-on-A4 photo */
+export interface FootMeasure {
+  lengthMm: number
+  widthMm: number
+  widthClass: 'narrow' | 'standard' | 'wide'
+  size: { eu: number; ukMen: number; usMen: number; usWomen: number }
 }
 
 /**
@@ -164,14 +175,15 @@ export function combineFootAnalyses(
   side?: FootAnalysisResult | null,
 ): FootAnalysisResult | null {
   if (!top && !side) return null
-  if (top && !side) return { ...top, mode: 'top-down' }
+  if (top && !side) return top
   if (side && !top) return { ...side, mode: 'side' }
 
   const t = top!
   const s = side!
   const score = (a: ArchType) => (a === 'low' ? 0 : a === 'normal' ? 1 : 2)
-  const avg = (score(t.arch) * t.archConfidence + score(s.arch) * s.archConfidence) /
-    Math.max(t.archConfidence + s.archConfidence, 0.01)
+  // A measured wet footprint is far more reliable than the side-view brightness heuristic
+  const tw = t.archConfidence * (t.mode === 'footprint' ? 2.5 : 1)
+  const avg = (score(t.arch) * tw + score(s.arch) * s.archConfidence) / Math.max(tw + s.archConfidence, 0.01)
 
   let arch: ArchType = 'normal'
   if (avg < 0.7) arch = 'low'
@@ -184,7 +196,7 @@ export function combineFootAnalyses(
     widthHint: t.widthHint,
     brightness: (t.brightness + s.brightness) / 2,
     notes: [
-      `Combined top-down (${t.arch}) and side-view (${s.arch}) estimates → ${arch} arch.`,
+      `Combined ${t.mode === 'footprint' ? 'footprint' : 'top-down'} (${t.arch}) and side-view (${s.arch}) estimates → ${arch} arch.`,
       ...t.notes.filter((n) => !n.includes('not a medical')),
       ...s.notes.filter((n) => !n.includes('not a medical')),
       'Combined both photos for a clearer arch reading — tweak it if needed.',
@@ -192,6 +204,7 @@ export function combineFootAnalyses(
     previewDataUrl: t.previewDataUrl || s.previewDataUrl,
     mode: 'combined',
     sideArchRatio: s.sideArchRatio,
+    csi: t.csi,
   }
 }
 

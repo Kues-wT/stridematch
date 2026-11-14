@@ -12,6 +12,8 @@ import {
 } from 'lucide-react'
 import { useProfile } from '../context/ProfileContext'
 import { useI18n } from '../context/I18nContext'
+import { HeroMatchCard } from '../components/HeroMatchCard'
+import { Reveal, RevealGroup } from '../motion/Reveal'
 
 export function Home() {
   const { isComplete, shortlist } = useProfile()
@@ -66,89 +68,65 @@ export function Home() {
           </ul>
         </div>
         <div className="hero-panel">
-          <div className="hero-card">
-            <div className="hero-card-top">
-              <span className="pill">{t('sampleMatch')}</span>
-              <span className="match-badge">{t('matchPct', { score: 92 })}</span>
-            </div>
-            <div className="hero-shoe">
-              <div className="hero-shoe-shape" />
-            </div>
-            <h3>ASICS Gel-Kayano 32</h3>
-            <p>Stability · balanced cushion · RM 749</p>
-            <div className="mini-bars">
-              <div>
-                <span>{t('fitBarArch')}</span>
-                <i style={{ width: '90%' }} />
-              </div>
-              <div>
-                <span>{t('fitBarGait')}</span>
-                <i style={{ width: '95%' }} />
-              </div>
-              <div>
-                <span>{t('fitBarCushion')}</span>
-                <i style={{ width: '78%' }} />
-              </div>
-            </div>
-          </div>
+          <HeroMatchCard />
         </div>
       </section>
 
       <section className="section">
         <h2 className="section-title">{t('homeStepsTitle')}</h2>
-        <div className="feature-grid">
-          <article className="feature">
+        <RevealGroup className="feature-grid">
+          <Reveal as="article" className="feature">
             <div className="feature-icon">
               <Camera size={22} />
             </div>
             <h3>{t('homeStep1Title')}</h3>
             <p>{t('homeStep1Body')}</p>
-          </article>
-          <article className="feature">
+          </Reveal>
+          <Reveal as="article" className="feature">
             <div className="feature-icon">
               <ClipboardList size={22} />
             </div>
             <h3>{t('homeStep2Title')}</h3>
             <p>{t('homeStep2Body')}</p>
-          </article>
-          <article className="feature">
+          </Reveal>
+          <Reveal as="article" className="feature">
             <div className="feature-icon">
               <Sparkles size={22} />
             </div>
             <h3>{t('homeStep3Title')}</h3>
             <p>{t('homeStep3Body')}</p>
-          </article>
-        </div>
+          </Reveal>
+        </RevealGroup>
       </section>
 
       <section className="section">
         <h2 className="section-title">{t('homeAfterTitle')}</h2>
-        <div className="feature-grid">
-          <article className="feature">
+        <RevealGroup className="feature-grid">
+          <Reveal as="article" className="feature">
             <div className="feature-icon">
               <Heart size={22} />
             </div>
             <h3>{t('homeShortlistTitle')}</h3>
             <p>{t('homeShortlistBody', { count: countBit })}</p>
-          </article>
-          <article className="feature">
+          </Reveal>
+          <Reveal as="article" className="feature">
             <div className="feature-icon">
               <GitCompareArrows size={22} />
             </div>
             <h3>{t('homeCompareTitle')}</h3>
             <p>{t('homeCompareBody')}</p>
-          </article>
-          <article className="feature">
+          </Reveal>
+          <Reveal as="article" className="feature">
             <div className="feature-icon">
               <MapPin size={22} />
             </div>
             <h3>{t('homeStoresTitle')}</h3>
             <p>{t('homeStoresBody')}</p>
-          </article>
-        </div>
+          </Reveal>
+        </RevealGroup>
       </section>
 
-      <section className="cta-band">
+      <Reveal as="section" className="cta-band">
         <div>
           <h2>{t('homeCtaTitle')}</h2>
           <p>{t('homeCtaBody')}</p>
@@ -156,7 +134,7 @@ export function Home() {
         <Link to={isComplete ? '/results' : '/analyze'} className="btn btn-primary btn-lg">
           {isComplete ? t('viewMatches') : t('ctaFind')}
         </Link>
-      </section>
+      </Reveal>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-# StrideMatch — Product Plan
+# KasutKu — Product Plan
 
 **Tagline:** Find your perfect running shoes with photo-based foot analysis.
 
@@ -12,7 +12,7 @@ Most runners buy shoes based on brand hype, store pressure, or a single treadmil
 
 ## 2. Solution
 
-**StrideMatch** is a web app that combines:
+**KasutKu** is a web app that combines:
 
 1. **Photo foot analysis** — user uploads a top-down foot photo; client-side analysis estimates arch type and foot shape cues.
 2. **Optional gait cues** — short guidance + self-reported or video-assisted pronation check.
@@ -136,6 +136,6 @@ Top 3–5 returned with explanations.
 
 ## 12. Brand notes
 
-- Name: **StrideMatch**
+- Name: **KasutKu**
 - Colors: deep ink navy, electric lime accent, clean white surfaces
 - Tone: confident, coach-like, never snobby

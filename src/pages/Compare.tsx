@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Heart } from 'lucide-react'
 import { useProfile } from '../context/ProfileContext'
-import { shoes } from '../data/shoes'
+import { archProfileKey, shoes } from '../data/shoes'
 import { recommendShoes } from '../lib/recommend'
 import { getFitBreakdown } from '../lib/fitBreakdown'
 import { ShoeImage } from '../components/ShoeImage'
@@ -44,7 +44,7 @@ export function Compare() {
     { key: 'price', labelKey: 'rowPrice', get: (id, c) => `RM ${c.byId[id].priceMyr}` },
     { key: 'brand', labelKey: 'rowBrand', get: (id, c) => c.byId[id].brand },
     { key: 'stability', labelKey: 'rowStability', get: (id, c) => c.byId[id].stability },
-    { key: 'arch', labelKey: 'rowArch', get: (id, c) => c.byId[id].archSupport },
+    { key: 'arch', labelKey: 'rowArch', get: (id, c) => t(archProfileKey(c.byId[id].archSupport)) },
     { key: 'cushion', labelKey: 'rowCushion', get: (id, c) => c.byId[id].cushion },
     { key: 'drop', labelKey: 'rowDrop', get: (id, c) => `${c.byId[id].dropMm} mm` },
     { key: 'weight', labelKey: 'rowWeight', get: (id, c) => `${c.byId[id].weightG} g` },

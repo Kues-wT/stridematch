@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Activity, Footprints, Heart, Menu, X } from 'lucide-react'
 import { CompareBar } from './CompareBar'
 import { useProfile } from '../context/ProfileContext'
+import { PageDecor } from '../motion/PageDecor'
+import { PageTransition } from '../motion/PageTransition'
+import { useScrollMemory } from '../motion/useScrollMemory'
+import { useScrolled } from '../motion/useScrolled'
 import { useI18n } from '../context/I18nContext'
 
 export function Layout() {
@@ -10,6 +14,8 @@ export function Layout() {
   const { lang, setLang, t } = useI18n()
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
+  const scrolled = useScrolled()
+  useScrollMemory()
 
   // Close drawer on route change
   useEffect(() => {
@@ -55,7 +61,8 @@ export function Layout() {
 
   return (
     <div className="app-shell">
-      <header className="topbar">
+      <PageDecor />
+      <header className={`topbar${scrolled ? ' scrolled' : ''}`}>
         <button
           type="button"
           className="icon-btn menu-toggle"
@@ -72,7 +79,7 @@ export function Layout() {
             <Footprints size={20} strokeWidth={2.25} />
           </span>
           <span className="brand-text">
-            Stride<span>Match</span>
+            Kasut<span>Ku</span>
           </span>
         </Link>
 
@@ -162,7 +169,7 @@ export function Layout() {
       </nav>
 
       <main className="main">
-        <Outlet />
+        <PageTransition />
       </main>
       <CompareBar />
       <footer className="footer">

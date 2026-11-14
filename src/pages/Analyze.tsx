@@ -1,6 +1,17 @@
 import { useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Camera, ImagePlus, Loader2, RefreshCw, ArrowRight, Lightbulb, Footprints, PersonStanding } from 'lucide-react'
+import {
+  Camera,
+  ImagePlus,
+  Loader2,
+  RefreshCw,
+  ArrowRight,
+  Lightbulb,
+  Footprints,
+  PersonStanding,
+  Ruler,
+  Sparkles,
+} from 'lucide-react'
 import {
   analyzeFootPhoto,
   analyzeWearPhoto,
@@ -9,16 +20,43 @@ import {
   type FootAnalysisResult,
   type WearAnalysisResult,
 } from '../lib/analysis'
+import { aiCheckPhoto, scanFootprintFile, scanPaperFile, type AiCheckError } from '../lib/footscan/browser'
+import type { ScanIssue, ScanIssueCode } from '../lib/footscan/footprint'
+import type { SizeScan } from '../lib/footscan/sizing'
+import { loadJson, saveJson } from '../lib/storage'
 import { useProfile } from '../context/ProfileContext'
 import { StepIndicator } from '../components/StepIndicator'
 import { OptionCard } from '../components/OptionCard'
 import { useI18n } from '../context/I18nContext'
 import type { TranslationKey } from '../i18n/translations'
 
+const ISSUE_KEYS: Record<ScanIssueCode, TranslationKey> = {
+  'low-contrast': 'issueLowContrast',
+  'not-found': 'issueNotFound',
+  'cut-off': 'issueCutOff',
+  'too-small': 'issueTooSmall',
+  'not-foot-shape': 'issueNotFootShape',
+  blurry: 'issueBlurry',
+  'no-paper': 'issueNoPaper',
+  'paper-cut-off': 'issuePaperCutOff',
+  'toes-off-paper': 'issueToesOffPaper',
+  'side-off-paper': 'issueSideOffPaper',
+}
+
+const AI_ERROR_KEYS: Record<AiCheckError, TranslationKey> = {
+  'not-configured': 'aiNotConfigured',
+  'limit-reached': 'aiLimit',
+  offline: 'aiFailed',
+  failed: 'aiFailed',
+}
+
+const AI_PREF_KEY = 'stridematch.aiCheck.v1'
+
 export function Analyze() {
   const navigate = useNavigate()
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const topRef = useRef<HTMLInputElement>(null)
+  const sizeRef = useRef<HTMLInputElement>(null)
   const sideRef = useRef<HTMLInputElement>(null)
   const wearRef = useRef<HTMLInputElement>(null)
   const {
@@ -32,7 +70,15 @@ export function Analyze() {
   } = useProfile()
 
   const [step, setStep] = useState(0)
-  const [busy, setBusy] = useState<'top' | 'side' | 'wear' | null>(null)
+  const [busy, setBusy] = useState<'top' | 'size' | 'side' | 'wear' | null>(null)
+  const [printIssues, setPrintIssues] = useState<string[]>([])
+  const [printNotes, setPrintNotes] = useState<string[]>([])
+  const [sizeScan, setSizeScan] = useState<SizeScan | null>(null)
+  const [sizePreview, setSizePreview] = useState<string | null>(null)
+  const [sizeIssues, setSizeIssues] = useState<string[]>([])
+  const [sizeNotes, setSizeNotes] = useState<string[]>([])
+  const [aiOn, setAiOn] = useState(() => loadJson<boolean>(AI_PREF_KEY, false))
+  const [aiBusy, setAiBusy] = useState<'top' | 'size' | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [topResult, setTopResult] = useState<FootAnalysisResult | null>(null)
   const [sideResult, setSideResult] = useState<FootAnalysisResult | null>(null)
@@ -55,18 +101,128 @@ export function Analyze() {
     }
     setError(null)
     setBusy('top')
+    setPrintIssues([])
+    setPrintNotes([])
     try {
-      const localUrl = URL.createObjectURL(file)
-      setPhotoPreview(localUrl)
-      const result = await analyzeFootPhoto(file, 'top-down')
+      const { scan, previewDataUrl } = await scanFootprintFile(file)
+      setPhotoPreview(previewDataUrl)
+      setPrintIssues(issueText(scan.issues))
+      if (!scan.ok || !scan.arch || scan.csi === undefined) {
+        setTopResult(null)
+        return
+      }
+
+      const csiPct = Math.round(scan.csi * 100)
+      let result: FootAnalysisResult = {
+        arch: scan.arch,
+        archConfidence: scan.confidence ?? 0.6,
+        widthHint: sizeScan?.widthClass ?? profile.widthHint ?? 'standard',
+        brightness: 0,
+        notes: [
+          `Footprint arch index ${csiPct}% (midfoot ÷ forefoot print width) → ${scan.arch} arch.`,
+          'Under 25% usually means a high arch, 45% or more a low / flat arch.',
+        ],
+        previewDataUrl,
+        mode: 'footprint',
+        csi: scan.csi,
+      }
       setTopResult(result)
-      const combined = combineFootAnalyses(result, sideResult)
-      applyFootResult(combined ?? result)
+      applyFootResult(combineFootAnalyses(result, sideResult) ?? result)
+
+      if (aiOn) {
+        setAiBusy('top')
+        const ai = await aiCheckPhoto(file, 'footprint', lang, { arch: scan.arch, csi: scan.csi })
+        setAiBusy(null)
+        if (!ai.ok) {
+          setPrintNotes([t(AI_ERROR_KEYS[ai.error])])
+          return
+        }
+        const { check } = ai
+        const notes = check.explanation ? [t('aiSays', { text: check.explanation })] : []
+        if (!check.usable) {
+          setPrintIssues((prev) => [...prev, ...(check.retakeTip ? [check.retakeTip] : check.problems)])
+          result = { ...result, archConfidence: Math.min(result.archConfidence, 0.45) }
+        } else if (check.archGuess !== 'unknown' && check.archGuess !== scan.arch) {
+          notes.unshift(t('aiDisagree', { arch: archWord(check.archGuess) }))
+          result = { ...result, archConfidence: Math.min(result.archConfidence, 0.5) }
+        } else if (check.archGuess === scan.arch) {
+          notes.unshift(t('aiAgree'))
+          result = { ...result, archConfidence: Math.min(0.92, result.archConfidence + 0.05) }
+        }
+        result = { ...result, notes: [...result.notes, ...notes] }
+        setPrintNotes(notes)
+        setTopResult(result)
+        applyFootResult(combineFootAnalyses(result, sideResult) ?? result)
+      }
     } catch {
-      setError(t('errTopPhoto'))
+      setError(t('errPrintPhoto'))
     } finally {
       setBusy(null)
+      setAiBusy(null)
     }
+  }
+
+  const runSize = async (file: File | null | undefined) => {
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      setError(t('errImageType'))
+      return
+    }
+    setError(null)
+    setBusy('size')
+    setSizeIssues([])
+    setSizeNotes([])
+    try {
+      const { scan, previewDataUrl } = await scanPaperFile(file)
+      setSizePreview(previewDataUrl)
+      setSizeIssues(issueText(scan.issues))
+      if (!scan.ok || !scan.size || !scan.lengthMm || !scan.widthMm || !scan.widthClass) {
+        setSizeScan(null)
+        setProfile({ footMeasure: undefined })
+        return
+      }
+      setSizeScan(scan)
+      setProfile({
+        widthHint: scan.widthClass,
+        footMeasure: {
+          lengthMm: Math.round(scan.lengthMm),
+          widthMm: Math.round(scan.widthMm),
+          widthClass: scan.widthClass,
+          size: scan.size,
+        },
+      })
+      if (analysis) setAnalysis({ ...analysis, widthHint: scan.widthClass })
+
+      if (aiOn) {
+        setAiBusy('size')
+        const ai = await aiCheckPhoto(file, 'paper', lang, {
+          lengthMm: Math.round(scan.lengthMm),
+          widthMm: Math.round(scan.widthMm),
+        })
+        setAiBusy(null)
+        if (!ai.ok) {
+          setSizeNotes([t(AI_ERROR_KEYS[ai.error])])
+          return
+        }
+        const { check } = ai
+        if (!check.usable) {
+          setSizeIssues((prev) => [...prev, ...(check.retakeTip ? [check.retakeTip] : check.problems)])
+        }
+        setSizeNotes(check.explanation ? [t('aiSays', { text: check.explanation })] : [])
+      }
+    } catch {
+      setError(t('errSizePhoto'))
+    } finally {
+      setBusy(null)
+      setAiBusy(null)
+    }
+  }
+
+  const issueText = (issues: ScanIssue[]) => issues.map((i) => t(ISSUE_KEYS[i.code]))
+
+  const toggleAi = (on: boolean) => {
+    setAiOn(on)
+    saveJson(AI_PREF_KEY, on)
   }
 
   const runSide = async (file: File | null | undefined) => {
@@ -145,10 +301,15 @@ export function Analyze() {
     setAnalysis(null)
     setPhotoPreview(null)
     setSidePreview(null)
+    setSizeScan(null)
+    setSizePreview(null)
+    setPrintIssues([])
+    setSizeIssues([])
     setProfile({
       arch: profile.arch ?? 'normal',
       archSource: 'manual',
       widthHint: profile.widthHint ?? 'standard',
+      footMeasure: undefined,
     })
     setStep(1)
   }
@@ -187,8 +348,25 @@ export function Analyze() {
   }
 
   const topLabel = topResult
-    ? `${archWord(topResult.arch)} · ${topResult.widthHint}`
-    : null
+    ? t('scanArchResult', {
+        arch: archWord(topResult.arch),
+        csi: Math.round((topResult.csi ?? 0) * 100),
+      })
+    : printIssues.length
+      ? t('retakeNeeded')
+      : null
+  const sizeLabel = sizeScan?.size
+    ? t('scanSizeResult', {
+        length: Math.round(sizeScan.lengthMm ?? 0),
+        eu: sizeScan.size.eu,
+        us: sizeScan.size.usMen,
+      })
+    : sizeIssues.length
+      ? t('retakeNeeded')
+      : null
+  const measure = profile.footMeasure
+  const widthWord = (w: 'narrow' | 'standard' | 'wide') =>
+    t(w === 'narrow' ? 'widthNarrow' : w === 'wide' ? 'widthWide' : 'widthStandard')
   const sideLabel = sideResult
     ? `${archWord(sideResult.arch)} · ${Math.round((sideResult.sideArchRatio ?? 0) * 100)}%`
     : null
@@ -214,11 +392,21 @@ export function Analyze() {
           <h2>{t('photoSectionTitle')}</h2>
           <p className="muted">{t('photoSectionBody')}</p>
 
+          <label className="ai-toggle">
+            <input type="checkbox" checked={aiOn} onChange={(e) => toggleAi(e.target.checked)} />
+            <span>
+              <strong>
+                <Sparkles size={16} aria-hidden /> {t('aiToggleTitle')}
+              </strong>
+              <span className="muted">{t('aiToggleBody')}</span>
+            </span>
+          </label>
+
           <div className="photo-slots">
             <PhotoSlot
-              title={t('photoTopTitle')}
+              title={t('photoPrintTitle')}
               icon={<Footprints size={20} />}
-              hint={t('photoTopHint')}
+              hint={t('photoPrintHint')}
               busy={busy === 'top'}
               preview={topResult?.previewDataUrl || photoPreview}
               resultLabel={topLabel}
@@ -227,6 +415,23 @@ export function Analyze() {
               replaceLabel={t('tapReplace')}
               inputRef={topRef}
               onFile={(f) => void runTop(f)}
+              issues={printIssues}
+              notes={aiBusy === 'top' ? [t('aiChecking')] : printNotes}
+            />
+            <PhotoSlot
+              title={t('photoSizeTitle')}
+              icon={<Ruler size={20} />}
+              hint={t('photoSizeHint')}
+              busy={busy === 'size'}
+              preview={sizePreview}
+              resultLabel={sizeLabel}
+              analysingLabel={t('analysing')}
+              addLabel={t('addPhoto')}
+              replaceLabel={t('tapReplace')}
+              inputRef={sizeRef}
+              onFile={(f) => void runSize(f)}
+              issues={sizeIssues}
+              notes={aiBusy === 'size' ? [t('aiChecking')] : sizeNotes}
             />
             <PhotoSlot
               title={t('photoSideTitle')}
@@ -306,7 +511,27 @@ export function Analyze() {
             <p className="confirm-callout-cta">{t('confirmAdjustBody')}</p>
           </div>
 
-          {(analysis?.previewDataUrl || photoPreview || sidePreview || wearPreview) && (
+          {measure && (
+            <div className="tip-box measured-size">
+              <Ruler size={18} />
+              <div>
+                <strong>{t('measuredSizeTitle')}</strong>
+                <p>
+                  {t('measuredSizeBody', {
+                    length: measure.lengthMm,
+                    width: measure.widthMm,
+                    widthClass: widthWord(measure.widthClass),
+                    eu: measure.size.eu,
+                    uk: measure.size.ukMen,
+                    us: measure.size.usMen,
+                    usw: measure.size.usWomen,
+                  })}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {(analysis?.previewDataUrl || photoPreview || sizePreview || sidePreview || wearPreview) && (
             <div className="preview-mosaic">
               {(analysis?.previewDataUrl || photoPreview) && (
                 <img
@@ -315,6 +540,7 @@ export function Analyze() {
                   className="preview-img"
                 />
               )}
+              {sizePreview && <img src={sizePreview} alt="" className="preview-img" />}
               {(sideResult?.previewDataUrl || sidePreview) && (
                 <img
                   src={sideResult?.previewDataUrl || sidePreview || ''}
@@ -592,6 +818,8 @@ function PhotoSlot({
   replaceLabel,
   inputRef,
   onFile,
+  issues = [],
+  notes = [],
 }: {
   title: string
   icon: ReactNode
@@ -604,6 +832,10 @@ function PhotoSlot({
   replaceLabel: string
   inputRef: React.RefObject<HTMLInputElement | null>
   onFile: (file: File | null | undefined) => void
+  /** Retake advice from the scanner / AI check */
+  issues?: string[]
+  /** Extra info such as the AI second opinion */
+  notes?: string[]
 }) {
   return (
     <div className="photo-slot">
@@ -625,7 +857,11 @@ function PhotoSlot({
           accept="image/*"
           capture="environment"
           hidden
-          onChange={(e) => onFile(e.target.files?.[0])}
+          onChange={(e) => {
+            onFile(e.target.files?.[0])
+            // Let the same file be picked again after a retake
+            e.target.value = ''
+          }}
         />
         {busy ? (
           <>
@@ -646,6 +882,20 @@ function PhotoSlot({
           </>
         )}
       </button>
+      {issues.length > 0 && (
+        <ul className="scan-issues" role="alert">
+          {issues.map((issue) => (
+            <li key={issue}>{issue}</li>
+          ))}
+        </ul>
+      )}
+      {notes.length > 0 && (
+        <ul className="scan-notes">
+          {notes.map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

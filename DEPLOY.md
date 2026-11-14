@@ -1,7 +1,7 @@
-# Deploy StrideMatch — step by step (Vercel + GitHub)
+# Deploy KasutKu — step by step (Vercel + GitHub)
 
 **Goal:** Put your app on the internet so anyone can open a link like  
-`https://stridematch.vercel.app`
+`https://kasutku.vercel.app`
 
 **Time:** about 15–20 minutes the first time  
 **Cost:** free for a personal project  
@@ -11,7 +11,7 @@
 
 ## What “deploy” means (simple)
 
-Right now StrideMatch only runs on **your computer**.
+Right now KasutKu only runs on **your computer**.
 
 | Word | Meaning |
 |------|---------|
@@ -35,7 +35,7 @@ You do **not** need a database, server, or domain name for this.
 
 ---
 
-# Part A — Put StrideMatch on GitHub
+# Part A — Put KasutKu on GitHub
 
 Do this on **your computer** (the machine where the `running-shoe-finder` folder lives).
 
@@ -71,13 +71,13 @@ If this fails, fix errors before deploying.
 ```bash
 git init
 git add .
-git commit -m "Initial StrideMatch app"
+git commit -m "Initial KasutKu app"
 ```
 
 ### A5. Create an empty repo on GitHub
 
 1. Open https://github.com/new  
-2. **Repository name:** e.g. `stridematch` (any name is fine)  
+2. **Repository name:** e.g. `kasutku` (any name is fine)  
 3. Leave it **Public** (easiest) or Private  
 4. **Do not** tick “Add a README” (your folder already has files)  
 5. Click **Create repository**
@@ -86,18 +86,18 @@ GitHub will show commands. Use the ones similar to below.
 
 ### A6. Connect your folder to GitHub and push
 
-Replace `YOUR_USERNAME` and `stridematch` with your real GitHub username and repo name:
+Replace `YOUR_USERNAME` and `kasutku` with your real GitHub username and repo name:
 
 ```bash
 git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/stridematch.git
+git remote add origin https://github.com/YOUR_USERNAME/kasutku.git
 git push -u origin main
 ```
 
 - If GitHub asks you to log in, use the browser or a **Personal Access Token** (not your normal password).  
 - When it finishes, refresh the GitHub page — you should see your files (`src`, `package.json`, etc.).
 
-**Checkpoint:** You can open `https://github.com/YOUR_USERNAME/stridematch` and see the code.
+**Checkpoint:** You can open `https://github.com/YOUR_USERNAME/kasutku` and see the code.
 
 ---
 
@@ -112,7 +112,7 @@ git push -u origin main
 ### B2. Import the project
 
 1. On the Vercel dashboard, click **Add New…** → **Project**  
-2. You should see your GitHub repos. Find **stridematch** (or whatever you named it)  
+2. You should see your GitHub repos. Find **kasutku** (or whatever you named it)  
 3. Click **Import**
 
 If you don’t see the repo:
@@ -145,11 +145,11 @@ The file `vercel.json` in the project already tells Vercel how to handle page ro
 
 Your site is live. Example URL:
 
-`https://stridematch-xxxx.vercel.app`
+`https://kasutku-xxxx.vercel.app`
 
 You can rename it later under **Project → Settings → Domains**.
 
-**Checkpoint:** Opening that URL shows the StrideMatch home page.
+**Checkpoint:** Opening that URL shows the KasutKu home page.
 
 ---
 
@@ -251,7 +251,7 @@ Vercel → Project → **Settings** → **Domains** → add `yourdomain.com` and
 - [ ] You can open the public URL on your phone (not just your PC)  
 - [ ] Friends can open the same link  
 
-That’s it — StrideMatch is deployed.
+That’s it — KasutKu is deployed.
 
 ---
 
@@ -261,7 +261,7 @@ That’s it — StrideMatch is deployed.
 # First time (on your PC)
 cd running-shoe-finder
 npm install && npm run build
-git init && git add . && git commit -m "Initial StrideMatch app"
+git init && git add . && git commit -m "Initial KasutKu app"
 # create empty repo on github.com/new then:
 git branch -M main
 git remote add origin https://github.com/YOUR_USERNAME/REPO.git

@@ -8,6 +8,7 @@ import { ShoeImage } from '../components/ShoeImage'
 import { useToast } from '../components/Toast'
 import { useI18n } from '../context/I18nContext'
 import type { TranslationKey } from '../i18n/translations'
+import { Reveal } from '../motion/Reveal'
 
 export function Catalog() {
   const { asUserProfile, isShortlisted, toggleShortlist, isComparing, toggleCompare } = useProfile()
@@ -164,7 +165,7 @@ export function Catalog() {
           const saved = isShortlisted(shoe.id)
           const comparing = isComparing(shoe.id)
           return (
-            <article key={shoe.id} className="catalog-card">
+            <Reveal as="article" key={shoe.id} className="catalog-card">
               <div className="catalog-visual">
                 <ShoeImage
                   src={shoe.image}
@@ -215,7 +216,7 @@ export function Catalog() {
                   </div>
                 </div>
               </div>
-            </article>
+            </Reveal>
           )
         })}
       </div>

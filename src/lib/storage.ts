@@ -1,6 +1,9 @@
+// Keys keep the original 'stridematch.' prefix so testers keep their saved data after the KasutKu rename
 const PROFILE_KEY = 'stridematch.profile.v1'
 const SHORTLIST_KEY = 'stridematch.shortlist.v1'
 const COMPARE_KEY = 'stridematch.compare.v1'
+const FEEDBACK_KEY = 'stridematch.feedback.v1'
+const DEVICE_KEY = 'stridematch.device.v1'
 
 export function loadJson<T>(key: string, fallback: T): T {
   try {
@@ -32,4 +35,6 @@ export const storageKeys = {
   profile: PROFILE_KEY,
   shortlist: SHORTLIST_KEY,
   compare: COMPARE_KEY,
+  feedback: FEEDBACK_KEY,
+  device: DEVICE_KEY,
 }

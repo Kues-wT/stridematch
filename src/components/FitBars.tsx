@@ -1,4 +1,8 @@
+import { useContext } from 'react'
+import { m } from 'motion/react'
 import type { FitDimension } from '../lib/fitBreakdown'
+import { useReduceMotion } from '../motion/useReduceMotion'
+import { RevealInstantly } from '../motion/Reveal'
 import { useI18n } from '../context/I18nContext'
 import type { TranslationKey } from '../i18n/translations'
 
@@ -9,6 +13,21 @@ const LABEL_KEY: Record<string, TranslationKey> = {
   surface: 'fitBarSurface',
   budget: 'fitBarBudget',
   overall: 'fitBarOverall',
+}
+
+/** Bar fill that grows to its score the first time it scrolls into view. */
+function Fill({ score }: { score: number }) {
+  const reduce = useReduceMotion()
+  const instant = useContext(RevealInstantly)
+  if (reduce || instant) return <i style={{ width: `${score}%` }} />
+  return (
+    <m.i
+      initial={{ width: '0%' }}
+      whileInView={{ width: `${score}%` }}
+      viewport={{ once: true, amount: 0.6 }}
+      transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
+    />
+  )
 }
 
 export function FitBars({ dims, compact }: { dims: FitDimension[]; compact?: boolean }) {
@@ -23,7 +42,7 @@ export function FitBars({ dims, compact }: { dims: FitDimension[]; compact?: boo
             <strong>{d.score}%</strong>
           </div>
           <div className="fit-bar-track" aria-hidden>
-            <i style={{ width: `${d.score}%` }} />
+            <Fill score={d.score} />
           </div>
         </div>
       ))}

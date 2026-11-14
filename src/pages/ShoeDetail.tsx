@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Check, ExternalLink, GitCompareArrows, Heart } from 'lucide-react'
-import { lazadaSearchUrl, shoes, shopeeSearchUrl } from '../data/shoes'
+import { archProfileKey, lazadaSearchUrl, shoes, shopeeSearchUrl } from '../data/shoes'
 import { useProfile } from '../context/ProfileContext'
 import { recommendShoes } from '../lib/recommend'
 import { useMemo } from 'react'
@@ -142,7 +142,7 @@ export function ShoeDetail() {
 
           <div className="spec-grid">
             <Spec label={t('labelStability')} value={stab} />
-            <Spec label={t('labelArchSupport')} value={shoe.archSupport} />
+            <Spec label={t('labelArchSupport')} value={t(archProfileKey(shoe.archSupport))} />
             <Spec label={t('labelCushion')} value={t(shoe.cushion as TranslationKey)} />
             <Spec label={t('labelDrop')} value={`${shoe.dropMm} mm`} />
             <Spec label={t('labelWeight')} value={`~${shoe.weightG} g`} />
